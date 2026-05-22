@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import TanstackProviders from "./providers/tanstackProviders";
+import { cn } from "@/lib/utils";
+import { redirect } from "next/navigation";
+import { useMe } from "@/features/auth/hooks/useme";
+import { Toaster } from "sonner";
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,11 +32,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", inter.className, "font-sans", inter.variable)}
     >
       <body className="min-h-full flex flex-col">
         <TanstackProviders>
-          {children}
+          <main>{children}</main>
+          <Toaster />
         </TanstackProviders>
       </body>
     </html>

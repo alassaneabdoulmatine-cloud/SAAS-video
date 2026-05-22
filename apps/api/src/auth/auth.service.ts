@@ -28,6 +28,7 @@ export class AuthService {
         sub: user.id,
         email: user.email,
       }),
+      user,
     };
   }
 
