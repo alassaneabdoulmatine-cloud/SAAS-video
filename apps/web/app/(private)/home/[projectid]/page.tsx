@@ -16,7 +16,7 @@ import EmptyProjectState from "./EmptyProjectState";
 
 export default function ProjectDetailsPage() {
     // Bascule cet état à "false" pour tester l'état Empty (sans vidéo)
-    const [hasVideos, setHasVideos] = useState(false);
+    const [hasVideos, setHasVideos] = useState(true);
 
     return (
         <div className="min-h-screen text-foreground bg-background">

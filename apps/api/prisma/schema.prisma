@@ -11,49 +11,70 @@ datasource db {
   provider = "postgresql"
 }
 
-// enum for user role
-enum userRole {
+// --- ENUMS ---
+
+enum UserRole {
   ADMIN
   USER
 }
 
-enum workspaceRole {
+enum WorkspaceRole {
   OWNER
   MEMBER
 }
 
-// multi-tenant schema user and workspace and members
+// --- MODELS ---
 
-model user {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  name      String?
-  password  String
-  role      userRole  @default(USER)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  member    members[]
+model User {
+  id          String       @id @default(uuid())
+  email       String       @unique
+  name        String?
+  password    String
+  role        UserRole     @default(USER)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  memberships Membership[]
 }
 
-model workspace {
-  id        String    @id @default(uuid())
-  name      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  member    members[]
+model Workspace {
+  id          String       @id @default(uuid())
+  name        String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  memberships Membership[]
+  projects    Project[]
 }
 
-model members {
+model Membership {
   id          String        @id @default(uuid())
   userId      String
   workspaceId String
-  user        user          @relation(fields: [userId], references: [id])
-  workspace   workspace     @relation(fields: [workspaceId], references: [id])
-  // can add workspace role
-  role        workspaceRole @default(MEMBER)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  role        WorkspaceRole @default(MEMBER)
   createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
+  updatedAt   DateTime      @updatedAt // Correction ici : pas de @default(now())
 
-  // make sure that one user can't be added to the same workspace twice
   @@unique([userId, workspaceId])
+}
+
+model Project {
+  id          String    @id @default(uuid())
+  name        String
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  videos      Video[]
+}
+
+model Video {
+  id          String   @id @default(uuid())
+  title       String
+  description String? // Passé en optionnel au cas où une vidéo n'a pas de description
+  url         String
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

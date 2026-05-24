@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { user } from '@prisma/client';
+import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
 
@@ -33,7 +33,7 @@ export class AuthService {
   }
 
   // 2. Générer le JWT
-  async login(user: user) {
+  async login(user: User) {
     return this.generateToken(user);
   }
 
