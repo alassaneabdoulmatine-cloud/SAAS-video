@@ -12,45 +12,26 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 export class ProjectsService {
   constructor(private prisma: PrismaService) { }
 
-  private async checkMembership(userId: string, workspaceId: string) {
-    const member = await this.prisma.membership.findFirst({
-      where: {
-        userId,
-        workspaceId,
-      },
-    });
-
-    if (!member) {
-      throw new ForbiddenException(
-        "tu n'es pas membre de ce workspace",
-      );
-    }
-
-    return member;
-  }
-
-  async create(createProjectDto: CreateProjectDto, userId: string, workspaceId: string) {
-
-    await this.checkMembership(userId, workspaceId);
-
-    return this.prisma.project.create({
+  async create(createProjectDto: CreateProjectDto, workspaceId: string) {
+    const project = await this.prisma.project.create({
       data: {
         name: createProjectDto.name,
         workspaceId
       },
     });
+
+    return project;
   }
 
-  async findAll(userId: string, workspaceId: string) {
-    await this.checkMembership(userId, workspaceId);
-
-    return this.prisma.project.findMany({
+  async findAll(workspaceId: string) {
+    const projects = await this.prisma.project.findMany({
       where: { workspaceId },
     });
+
+    return projects;
   }
 
-  async findOne(id: string, userId: string, workspaceId: string) {
-    await this.checkMembership(userId, workspaceId);
+  async findOne(id: string, workspaceId: string) {
 
     const project = await this.prisma.project.findFirst({
       where: { id, workspaceId },
@@ -63,20 +44,22 @@ export class ProjectsService {
     return project;
   }
 
-  async update(id: string, updateProjectDto: UpdateProjectDto, userId: string, workspaceId: string) {
-    await this.checkMembership(userId, workspaceId);
+  async update(id: string, updateProjectDto: UpdateProjectDto) {
 
-    return this.prisma.project.update({
+    const project = await this.prisma.project.update({
       where: { id },
       data: { name: updateProjectDto.name },
     });
+
+    return project;
   }
 
-  async remove(id: string, userId: string, workspaceId: string) {
-    await this.checkMembership(userId, workspaceId);
+  async remove(id: string) {
 
-    return this.prisma.project.delete({
+    const project = await this.prisma.project.delete({
       where: { id },
     });
+
+    return project;
   }
 }
