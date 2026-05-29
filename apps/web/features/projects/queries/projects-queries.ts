@@ -6,16 +6,16 @@ import { toast } from "sonner";
 
 import { api } from "@/lib/api";
 import { projectKeys } from "@/lib/projects-querykeys";
-import { Project } from "../project-type";
+import { Project } from "../types/project-type";
 
-export function useProjects() {
+export function useProjects(projectId?: string) {
     const router = useRouter();
     const queryClient = useQueryClient();
 
     const params = useParams();
 
     const workspaceId = params.workspaceId as string;
-    const projectId = params.projectId as string | undefined;
+
 
     const baseUrl = `/${workspaceId}/projects`;
 

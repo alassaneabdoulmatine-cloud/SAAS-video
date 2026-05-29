@@ -1,9 +1,7 @@
 "use client";
 
-
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 
 import {
     Dialog,
@@ -15,36 +13,35 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { createProjectSchema, CreateProjectType } from "@/features/projects/shema/create-project-shema";
 import { Field, FieldError } from "@/components/ui/field";
 import { useProjects } from "../../queries/projects-queries";
 import { Spinner } from "@/components/ui/spinner";
+import { updateProjectSchema, UpdateProjectType } from "../../shema/update-project-schema";
+import { Project } from "../../types/project-type";
 
 interface CreateProjectModalProps {
     open: boolean;
     setOpen: (open: boolean) => void;
-    workspaceId: string;
+    project: Project;
 
 }
 
-export default function CreateProjectModal({ workspaceId, open, setOpen }: CreateProjectModalProps) {
+export default function UpdateProjectModal({ project, open, setOpen }: CreateProjectModalProps) {
 
     // 1. Initialisation du formulaire avec React Hook Form & Zod
-    const form = useForm<CreateProjectType>({
-        resolver: zodResolver(createProjectSchema),
+    const form = useForm<UpdateProjectType>({
+        resolver: zodResolver(updateProjectSchema),
         defaultValues: {
-            name: "", // Nettoyé pour démarrer à vide
-            workspaceId: workspaceId,
+            name: project.name, // Nettoyé pour démarrer à vide
+
         },
     });
 
-    const { createProject, isPendingCreateProject } = useProjects();
-
-    console.log("isPendingCreateProject", isPendingCreateProject)
+    const { updateProject, isPendingUpdateProject } = useProjects(project.id);
 
     // 2. Gestion de la soumission
-    async function onSubmit(data: CreateProjectType) {
-        await createProject(data.name);
+    async function onSubmit(data: UpdateProjectType) {
+        await updateProject(data.name);
         form.reset();
         setOpen(false);
     }
@@ -79,7 +76,7 @@ export default function CreateProjectModal({ workspaceId, open, setOpen }: Creat
                                         aria-invalid={fieldState.invalid}
                                         placeholder="Entrer le nom du projet"
                                         autoComplete="off"
-                                        disabled={isPendingCreateProject}
+                                        disabled={isPendingUpdateProject}
                                         className="h-10 px-4 focus-visible:ring-0 focus-visible:border-primary focus-visible:border-1 transition-all text-base"
                                     />
                                     {fieldState.invalid && fieldState.error?.message && (
@@ -96,7 +93,7 @@ export default function CreateProjectModal({ workspaceId, open, setOpen }: Creat
                         <Button
                             type="button"
                             variant="outline"
-                            disabled={isPendingCreateProject}
+                            disabled={isPendingUpdateProject}
                             onClick={handleCancel}
                             className="cursor-pointer"
                         >
@@ -104,11 +101,11 @@ export default function CreateProjectModal({ workspaceId, open, setOpen }: Creat
                         </Button>
                         <Button
                             type="submit"
-                            disabled={isPendingCreateProject}
+                            disabled={isPendingUpdateProject}
                             className="cursor-pointer min-w-[100px]"
                         >
-                            {isPendingCreateProject && <Spinner />}
-                            Créer
+                            {isPendingUpdateProject && <Spinner />}
+                            Modifier
                         </Button>
                     </div>
                 </form>

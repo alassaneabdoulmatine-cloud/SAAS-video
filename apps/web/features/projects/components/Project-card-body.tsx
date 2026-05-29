@@ -1,13 +1,22 @@
+"use client";
 import { Workspace } from "@/features/workspaces/types/workspace-type";
 import { Bell, Folder, Video } from "lucide-react";
+import { Project } from "../types/project-type";
+import { useParams, useRouter } from "next/navigation";
 type projectCardBodyProps = {
-    name: string;
+    project: Project;
     workspace: Workspace | undefined;
 }
 
-export default function ProjectCardBody({ name, workspace }: projectCardBodyProps) {
+export default function ProjectCardBody({ project, workspace }: projectCardBodyProps) {
+    const { workspaceId } = useParams();
+    const router = useRouter();
+
+    function handleRedirctToProject() {
+        router.push(`/${workspaceId}/project/${project.id}`);
+    }
     return (
-        <div className="relative flex-1 bg-slate-950 overflow-hidden p-4 flex flex-col justify-between">
+        <div className="relative flex-1 bg-slate-950 overflow-hidden p-4 flex flex-col justify-between cursor-pointer" onClick={handleRedirctToProject}>
             <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-primary/5 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -23,7 +32,7 @@ export default function ProjectCardBody({ name, workspace }: projectCardBodyProp
 
             <div className="relative z-10 space-y-1">
                 <h3 className="font-medium text-[14px] leading-snug tracking-tight text-white line-clamp-2">
-                    {name}
+                    {project.name}
                 </h3>
                 <p className="text-[11px] text-white/40 font-normal tracking-wide flex items-center gap-1">
                     <Folder className="h-3 w-3 opacity-60 text-primary" />

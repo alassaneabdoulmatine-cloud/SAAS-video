@@ -20,15 +20,21 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { ChevronDown, ChevronRight, Home, Folder, User2, LogOut, Settings } from "lucide-react"
-
-// Données de test pour tes projets
-const projects = [
-    { name: "Projet Alpha", url: "#" },
-    { name: "Projet Beta", url: "#" },
-    { name: "Dashboard Client", url: "#" },
-]
+import { useProjects } from "../projects/queries/projects-queries"
+import { useParams, usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 export function AppSidebar() {
+    const { projects } = useProjects()
+    const { workspaceId } = useParams()
+    const router = useRouter()
+    const pathname = usePathname()
+
+    const isActive = (path: string) => pathname === path
+    const homeActive = isActive(`/${workspaceId}/project/home`)
+
     return (
         <Sidebar>
             {/* HEADER : Sélecteur de Workspace (comme ton exemple) */}
@@ -37,7 +43,7 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton className="w-full justify-between font-medium">
+                                <SidebarMenuButton className="w-full justify-between font-medium h-12">
                                     <div className="flex items-center gap-2">
                                         <div className="flex h-6 w-6 items-center justify-center rounded-md bg-black text-white font-bold text-xs">
                                             O
@@ -68,11 +74,11 @@ export function AppSidebar() {
 
                             {/* 1. LIEN HOME (Simple et direct) */}
                             <SidebarMenuItem>
-                                <SidebarMenuButton asChild tooltip="Home">
-                                    <a href="/home" className="flex items-center gap-3 font-medium">
+                                <SidebarMenuButton asChild tooltip="Home" className={`${homeActive ? "bg-muted" : ""} cursor-pointer`}>
+                                    <Link href={`/${workspaceId}/project/home`} className="flex items-center gap-3">
                                         <Home className="h-4 w-4" />
                                         <span>Home</span>
-                                    </a>
+                                    </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
 
@@ -93,11 +99,12 @@ export function AppSidebar() {
                                     <CollapsibleContent>
                                         <SidebarMenuSub className="mt-1 border-l pl-4 ml-5">
                                             {projects.map((project) => (
-                                                <SidebarMenuSubItem key={project.name}>
-                                                    <SidebarMenuSubButton asChild>
-                                                        <a href={project.url} className="text-sm text-muted-foreground hover:text-foreground">
+                                                <SidebarMenuSubItem key={project.id}>
+                                                    <SidebarMenuSubButton className={`${isActive(`/${workspaceId}/project/${project.id}`) ? "bg-muted" : ""} w-full text-sm cursor-pointer`} asChild>
+                                                        <Link href={`/${workspaceId}/project/${project.id}`}>
                                                             <span>{project.name}</span>
-                                                        </a>
+                                                        </Link>
+
                                                     </SidebarMenuSubButton>
                                                 </SidebarMenuSubItem>
                                             ))}

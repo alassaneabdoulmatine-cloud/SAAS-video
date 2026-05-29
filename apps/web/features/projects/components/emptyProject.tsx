@@ -1,8 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { ArrowUpRightIcon, FolderCodeIcon, Plus } from "lucide-react";
+import CreateProjectModal from "./modal/CreateProjectModal";
+import { useState } from "react";
+import { useParams } from "next/navigation";
 
 export default function EmptyProject() {
+    const [open, setOpen] = useState(false);
+    const { workspaceId } = useParams();
+
+    function handleOpenCreateProject() {
+        setOpen(true);
+    }
+
     return (
         <div className="flex justify-center items-center h-screen bg-background px-4">
             <Empty className="max-w-md text-center flex flex-col items-center">
@@ -24,7 +34,7 @@ export default function EmptyProject() {
 
                 <EmptyContent className="flex flex-col items-center gap-3 mt-6 w-full">
                     {/* Bouton d'action principal avec icône Plus */}
-                    <Button className="gap-2 w-full h-8 sm:w-auto px-4 cursor-pointer">
+                    <Button onClick={handleOpenCreateProject} className="gap-2 w-full h-8 sm:w-auto px-4 cursor-pointer">
                         <Plus className="h-4 w-4" />
                         Créer un projet
                     </Button>
@@ -42,6 +52,8 @@ export default function EmptyProject() {
                     </Button>
                 </EmptyContent>
             </Empty>
+            {/* modal of project creation */}
+            <CreateProjectModal open={open} setOpen={setOpen} workspaceId={workspaceId as string} />
         </div>
     )
 }

@@ -6,6 +6,6 @@ export default function Page() {
     const { workspaces, workspaceListLoading } = useWorkspace()
 
     if (workspaceListLoading) return <div>Loading...</div>
-    if (workspaces && workspaces?.length > 0) redirect(`/${workspaces?.[0]?.id}/home`)
+    if (workspaces && workspaces?.length > 0) redirect(`/${workspaces?.[0]?.id}/project/home`)
 
 }

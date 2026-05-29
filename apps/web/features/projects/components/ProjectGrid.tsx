@@ -10,7 +10,7 @@ import { useProjects } from "@/features/projects/queries/projects-queries";
 
 export default function VideoFoldersWhite() {
 
-    const { projects, projectsLoading } = useProjects();
+    const { projects } = useProjects();
     const [open, setOpen] = useState(false);
     const { workspaceId } = useParams();
 
