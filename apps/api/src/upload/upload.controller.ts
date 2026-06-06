@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
 import { UploadService } from './upload.service';
 
 @Controller('upload/multipart')
@@ -16,16 +16,16 @@ export class UploadController {
     );
   }
 
-  @Post('part-url')
+  @Post('get-presigned-url')
   async getPartUrl(
     @Body() body: { key: string; uploadId: string; partNumber: number },
   ) {
-    const url = await this.uploadService.getPresignedPartUrl(
+    const uploadUrl = await this.uploadService.getPresignedPartUrl(
       body.key,
       body.uploadId,
       body.partNumber,
     );
-    return { url };
+    return { uploadUrl };
   }
 
   @Post('complete')

@@ -14,36 +14,13 @@ import EmptyProjectState from "../../../../../../features/videos/components/Empt
 import { useParams, usePathname } from "next/navigation";
 import { useVideos } from "@/features/videos/queries/videos-queries";
 
-const initialVideos = [
-    {
-        id: "vid-1",
-        title: "Short_ Tiktok_Final_v1.mp4",
-        url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=60",
-        createdAt: "2022-01-01T00:00:00.000Z",
-        updatedAt: "2022-01-01T00:00:00.000Z",
-
-    },
-    {
-        id: "vid-2",
-        title: "Chon_Insta_Export.mp4",
-        url: "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=500&auto=format&fit=crop&q=60",
-        createdAt: "2022-01-01T00:00:00.000Z",
-        updatedAt: "2022-01-01T00:00:00.000Z",
-
-    },
-    {
-        id: "vid-3",
-        title: "Video_Brute_ITW.mov",
-        url: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=500&auto=format&fit=crop&q=60",
-        createdAt: "2022-01-01T00:00:00.000Z",
-        updatedAt: "2022-01-01T00:00:00.000Z",
-
-    },
-];
-
 export default function ProjectDetailsPage() {
     // Bascule cet état à "false" pour tester l'état Empty (sans vidéo)
     const { videos, videosLoading } = useVideos()
+    const params = useParams()
+    const { projectId } = params as { workspaceId: string; projectId: string };
+    const [uploadProgress, setUploadProgress] = useState(0);
+
 
     if (videosLoading) return <div>Loading...</div>
     return (
@@ -51,9 +28,9 @@ export default function ProjectDetailsPage() {
 
 
             {videos.length > 0 ? (
-                <VideoFilesList videos={videos} />
+                <VideoFilesList videos={videos} uploadProgress={uploadProgress} setUploadProgress={setUploadProgress} />
             ) : (
-                <EmptyProjectState />
+                <EmptyProjectState projectId={projectId} uploadProgress={uploadProgress} setUploadProgress={setUploadProgress} />
             )}
 
         </div>

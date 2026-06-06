@@ -4,30 +4,55 @@ import { useDropzone } from "react-dropzone";
 import { UploadCloud, FileVideo } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
 import { useVideos } from "../queries/videos-queries";
+import { MultipartUploader } from "../upload/upload";
+type Props = {
+    projectId: string;
+    uploadProgress: number;
+    setUploadProgress: (percentage: number) => void;
+}
 
-
-export default function EmptyProjectState() {
-    const projectId = useParams().projectId as string;
-    const { createVideo, isPendingCreateVideo } = useVideos()
+export default function EmptyProjectState({ projectId, uploadProgress, setUploadProgress }: Props) {
+    const { createVideo, updateVideo } = useVideos()
     const [file, setFile] = useState<File | null>(null);
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
+
         if (acceptedFiles && acceptedFiles.length > 0) {
             setFile(acceptedFiles[0]);
             const formData = new FormData();
             formData.append("file", acceptedFiles[0]);
 
-            const response = await fetch('http://localhost:3001/uploadfile', {
-                method: 'POST',
-                body: formData,
-            })
-            const data = await response.json();
-            console.log(data)
-            // C'est ici que tu appelleras ta fonction d'upload vers ton backend ou Supabase
-            // createVideo({ title: acceptedFiles[0].name, description: acceptedFiles[0].name, url: acceptedFiles[0].webkitRelativePath || acceptedFiles[0].name, projectId: projectId })
-            console.log("Fichier prêt pour l'intégration :", acceptedFiles[0]);
+            // 1 - create the video with pending status
+            const video = await createVideo({
+                title: acceptedFiles[0].name,
+                fileSize: acceptedFiles[0].size,
+                mimeType: acceptedFiles[0].type,
+                fileName: acceptedFiles[0].name,
+                projectId: projectId,
+            });
+
+            // 2 - upload to s3 bucket
+            const uploader = new MultipartUploader(acceptedFiles[0], {
+                chunkSize: 10 * 1024 * 1024, // 10MB
+                maxConcurrent: 3,
+                onProgress: (percentage) => {
+                    setUploadProgress(percentage)
+                },
+            });
+
+            const s3Key = await uploader.upload();
+            console.log("Video uploaded successfully:", s3Key);
+            setFile(null)
+
+            // 3 - update video status
+            await updateVideo({
+                videoId: video.id,
+                updateVideoData: {
+                    status: "UPLOADING",
+                    s3Key: s3Key
+                }
+            });
         }
     }, []);
 
@@ -37,7 +62,8 @@ export default function EmptyProjectState() {
         maxFiles: 1
     });
 
-    console.log("file", file)
+
+    console.log("FILE", file)
 
     return (
         <div className="flex justify-center items-center h-[calc(100vh-10rem)] p-10">

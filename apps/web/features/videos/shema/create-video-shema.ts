@@ -3,8 +3,15 @@ import { z } from "zod";
 export const createVideoSchema = z.object({
     title: z.string().min(1, "Title is required"),
     description: z.string().optional(),
-    url: z.string().min(1, "Invalid URL"),
+    s3Key: z.string().optional(),
+    fileName: z.string().optional(),
+    fileSize: z.number().optional(),
+    mimeType: z.string().optional(),
+    status: z.string().optional(),
+    duration: z.number().optional(),
+    thumbnail: z.string().optional(),
     projectId: z.string(),
 })
 
 export type createVideoType = z.infer<typeof createVideoSchema>
+

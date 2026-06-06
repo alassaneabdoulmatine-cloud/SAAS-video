@@ -9,6 +9,8 @@ export class MultipartUploader {
 
     // Pour suivre précisément les octets envoyés par chaque morceau
     private trackProgress: Record<number, number> = {};
+    private baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+
 
     constructor(file: File, options: UploaderOptions) {
         this.file = file;
@@ -20,7 +22,7 @@ export class MultipartUploader {
     async upload(): Promise<string> {
         // Étape 1 : Initialiser l'upload au niveau du backend
         const { data: initData } = await axios.post(
-            "/api/upload/multipart/initiate",
+            `${this.baseUrl}/upload/multipart/initiate`,
             {
                 filename: this.file.name,
                 contentType: this.file.type,
@@ -54,7 +56,7 @@ export class MultipartUploader {
 
         // Étape 4 : Finaliser l'upload multipart
         await axios.post(
-            "/api/upload/multipart/complete",
+            `${this.baseUrl}/upload/multipart/complete`,
             { key, uploadId, parts: completedParts },
             {
                 headers: { "Content-Type": "application/json" },
@@ -68,7 +70,7 @@ export class MultipartUploader {
     private async uploadPart(key: string, uploadId: string, partNumber: number): Promise<CompletedPart> {
         // 1. Demander l'URL pré-signée pour ce morceau spécifique
         const { data: urlData } = await axios.post(
-            "/api/upload/multipart/get-presigned-url",
+            `${this.baseUrl}/upload/multipart/get-presigned-url`,
             { key, uploadId, partNumber },
             {
                 withCredentials: true

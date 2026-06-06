@@ -20,13 +20,7 @@ export function useVideos(videoId?: string) {
 
     const baseUrl = `/${workspaceId}/projects/${projectId}/videos`;
 
-    const urls = {
-        list: baseUrl,
-        create: baseUrl,
-        detail: `${baseUrl}/${videoId}`,
-        update: `${baseUrl}/${videoId}`,
-        delete: `${baseUrl}/${videoId}`,
-    };
+
 
     const handleError = (error: Error) => {
         toast.error(error.message);
@@ -52,7 +46,7 @@ export function useVideos(videoId?: string) {
         queryKey: videoKeys.list(workspaceId, projectId),
 
         queryFn: async () => {
-            return api<Video[]>(urls.list);
+            return api<Video[]>(baseUrl);
         },
 
         enabled: !!workspaceId,
@@ -66,7 +60,7 @@ export function useVideos(videoId?: string) {
         queryKey: videoKeys.detail(workspaceId, projectId, videoId!),
 
         queryFn: async () => {
-            return api<Video>(urls.detail);
+            return api<Video>(`${baseUrl}/${videoId}`);
         },
 
         enabled: !!workspaceId && !!projectId && !!videoId,
@@ -78,7 +72,7 @@ export function useVideos(videoId?: string) {
 
     const { mutateAsync: createVideo, isPending: isPendingCreateVideo } = useMutation({
         mutationFn: async (createVideoData: createVideoType) => {
-            return api<Video>(urls.create, {
+            return api<Video>(baseUrl, {
                 method: "POST",
                 body: JSON.stringify(createVideoData),
             });
@@ -97,8 +91,8 @@ export function useVideos(videoId?: string) {
     // =========================
 
     const { mutateAsync: updateVideo, isPending: isPendingUpdateVideo } = useMutation({
-        mutationFn: async (updateVideoData: updateVideoType) => {
-            return api<Video>(urls.update, {
+        mutationFn: async ({ videoId, updateVideoData }: { videoId: string, updateVideoData: updateVideoType }) => {
+            return api<Video>(`${baseUrl}/${videoId}`, {
                 method: "PATCH",
                 body: JSON.stringify(updateVideoData),
             });
@@ -117,8 +111,8 @@ export function useVideos(videoId?: string) {
     // =========================
 
     const { mutateAsync: deleteVideo, isPending: isPendingDeleteVideo } = useMutation({
-        mutationFn: async () => {
-            return api<Video>(urls.delete, {
+        mutationFn: async ({ videoId }: { videoId: string }) => {
+            return api<Video>(`${baseUrl}/${videoId}`, {
                 method: "DELETE",
             });
         },

@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString, IsOptional, MaxLength, MinLength } from "class-validator";
+import { VideoStatus } from "@prisma/client";
+import { IsNotEmpty, IsString, IsOptional, MaxLength, MinLength, IsDate, IsNumber, IsEnum } from "class-validator";
 
 export class CreateVideoDto {
     @IsNotEmpty({ message: "Le titre est requis" })
@@ -13,7 +14,58 @@ export class CreateVideoDto {
     @MaxLength(1000, { message: "La description doit contenir au plus 1000 caractères" })
     description: string;
 
-    @IsNotEmpty({ message: "L'URL est requise" })
-    @IsString({ message: "L'URL doit être une chaîne de caractères" })
-    url: string;
+    @IsOptional()
+    @IsEnum(VideoStatus, { message: "Le statut doit être PENDING, PROCESSING, READY ou ERROR" })
+    status: VideoStatus;
+
+
+    @IsOptional()
+    @IsString({ message: "La clé S3 doit être une chaîne de caractères" })
+    s3Key: string;
+
+    @IsOptional()
+    @IsString({ message: "Le nom du fichier doit être une chaîne de caractères" })
+    fileName: string;
+
+    @IsOptional()
+    @IsNumber()
+    fileSize: number;
+
+    @IsOptional()
+    @IsString({ message: "Le type MIME doit être une chaîne de caractères" })
+    mimeType: string;
+
+    @IsOptional()
+    @IsNumber()
+    duration: number;
+
+    @IsOptional()
+    @IsString({ message: "La miniature doit être une chaîne de caractères" })
+    thumbnail: string;
+
+    @IsNotEmpty({ message: "L'ID du projet est requis" })
+    @IsString({ message: "L'ID du projet doit être une chaîne de caractères" })
+    projectId: string;
+
 }
+
+// model Video {
+//   id String @id @default (uuid())
+//   title       String
+//   description String ?
+//   status VideoStatus @default (PENDING)
+
+//   s3Key    String ?
+//   fileName String ?
+//   fileSize Int ?
+//   mimeType String ?
+
+//   duration  Int ?
+//   thumbnail String ?
+
+//   projectId String
+//   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+//   createdAt DateTime @default (now())
+//   updatedAt DateTime @updatedAt
+// }
