@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import { workspaceKeys } from "@/lib/workspace-queryKeys";
+import { workspaceKeys } from "@/features/workspaces/queries/workspace-queryKeys";
 import { Workspace } from "../types/workspace-type";
 
 export function useWorkspace() {

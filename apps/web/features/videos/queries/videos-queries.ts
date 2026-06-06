@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { api } from "@/lib/api";
-import { videoKeys } from "@/lib/videos-querykeys";
+import { videoKeys } from "@/features/videos/queries/videos-querykeys";
 import { Video } from "../types/video-type";
 import { createVideoType } from "../shema/create-video-shema";
 import { updateVideoType } from "../shema/update-video-shema";

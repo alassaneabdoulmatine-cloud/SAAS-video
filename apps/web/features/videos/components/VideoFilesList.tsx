@@ -4,15 +4,17 @@ import { Clock, Download, Eye, MoreHorizontal, Pencil, Play, Plus, Trash2 } from
 import { Video } from "../types/video-type";
 import VideoFilesHeader from "./video-files-header";
 import VideosFilesCard from "./videos-files-card";
+import { useUploadStore } from "../store/upload-store";
 
 
 type VideoFilesListProps = {
     videos: Video[];
-    uploadProgress: number;
-    setUploadProgress: (progress: number) => void;
 };
 
-export default function VideoFilesList({ videos, uploadProgress, setUploadProgress }: VideoFilesListProps) {
+export default function VideoFilesList({ videos }: VideoFilesListProps) {
+
+    const { uploadProgress } = useUploadStore();
+
     return (
         <div className="flex w-full h-full flex-col gap-12">
             <div className="h-12">

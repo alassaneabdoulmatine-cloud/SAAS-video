@@ -5,56 +5,36 @@ import { UploadCloud, FileVideo } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useVideos } from "../queries/videos-queries";
-import { MultipartUploader } from "../upload/upload";
+import { uploadVideo } from "../services/video-upload-service";
+import { useUploadStore } from "../store/upload-store";
 type Props = {
     projectId: string;
-    uploadProgress: number;
-    setUploadProgress: (percentage: number) => void;
+
 }
 
-export default function EmptyProjectState({ projectId, uploadProgress, setUploadProgress }: Props) {
+export default function EmptyProjectState({ projectId }: Props) {
     const { createVideo, updateVideo } = useVideos()
     const [file, setFile] = useState<File | null>(null);
 
+
+    const { setUploadProgress } = useUploadStore();
+
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
 
-        if (acceptedFiles && acceptedFiles.length > 0) {
-            setFile(acceptedFiles[0]);
-            const formData = new FormData();
-            formData.append("file", acceptedFiles[0]);
+        if (!acceptedFiles?.length) return;
 
-            // 1 - create the video with pending status
-            const video = await createVideo({
-                title: acceptedFiles[0].name,
-                fileSize: acceptedFiles[0].size,
-                mimeType: acceptedFiles[0].type,
-                fileName: acceptedFiles[0].name,
-                projectId: projectId,
-            });
+        const file = acceptedFiles[0];
+        setFile(file);
 
-            // 2 - upload to s3 bucket
-            const uploader = new MultipartUploader(acceptedFiles[0], {
-                chunkSize: 10 * 1024 * 1024, // 10MB
-                maxConcurrent: 3,
-                onProgress: (percentage) => {
-                    setUploadProgress(percentage)
-                },
-            });
+        await uploadVideo(file, {
+            projectId,
+            createVideo,
+            updateVideo,
+            onProgress: setUploadProgress,
+        });
 
-            const s3Key = await uploader.upload();
-            console.log("Video uploaded successfully:", s3Key);
-            setFile(null)
-
-            // 3 - update video status
-            await updateVideo({
-                videoId: video.id,
-                updateVideoData: {
-                    status: "UPLOADING",
-                    s3Key: s3Key
-                }
-            });
-        }
-    }, []);
+        setFile(null);
+    }, [projectId, createVideo, updateVideo]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,

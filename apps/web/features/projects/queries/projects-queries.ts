@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { api } from "@/lib/api";
-import { projectKeys } from "@/lib/projects-querykeys";
+import { projectKeys } from "@/features/projects/queries/projects-querykeys";
 import { Project } from "../types/project-type";
 
 export function useProjects(projectId?: string) {
