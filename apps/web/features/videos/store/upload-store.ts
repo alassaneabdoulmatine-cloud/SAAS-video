@@ -7,5 +7,5 @@ type UploadState = {
 
 export const useUploadStore = create<UploadState>((set) => ({
     uploadProgress: 0,
-    setUploadProgress: (uploadProgress: number) => set({ uploadProgress }),
+    setUploadProgress: (uploadProgress: number) => set({ uploadProgress: Math.round(uploadProgress) }),
 }));

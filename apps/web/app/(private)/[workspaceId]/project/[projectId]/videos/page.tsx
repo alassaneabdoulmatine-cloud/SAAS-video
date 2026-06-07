@@ -19,8 +19,6 @@ export default function ProjectDetailsPage() {
     const { videos, videosLoading } = useVideos()
     const params = useParams()
     const { projectId } = params as { workspaceId: string; projectId: string };
-    const [uploadProgress, setUploadProgress] = useState(0);
-
 
     if (videosLoading) return <div>Loading...</div>
     return (
@@ -28,9 +26,9 @@ export default function ProjectDetailsPage() {
 
 
             {videos.length > 0 ? (
-                <VideoFilesList videos={videos} uploadProgress={uploadProgress} setUploadProgress={setUploadProgress} />
+                <VideoFilesList videos={videos} projectId={projectId} />
             ) : (
-                <EmptyProjectState projectId={projectId} uploadProgress={uploadProgress} setUploadProgress={setUploadProgress} />
+                <EmptyProjectState projectId={projectId} />
             )}
 
         </div>

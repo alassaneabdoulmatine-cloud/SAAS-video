@@ -16,6 +16,7 @@ export async function uploadVideo(file: File, deps: UploadDeps) {
         fileSize: file.size,
         mimeType: file.type,
         fileName: file.name,
+        status: "UPLOADING",
         projectId: deps.projectId,
     });
 
@@ -32,7 +33,7 @@ export async function uploadVideo(file: File, deps: UploadDeps) {
     await deps.updateVideo({
         videoId: video.id,
         updateVideoData: {
-            status: "UPLOADING",
+            status: "PROCESSING",
             s3Key,
         },
     });
