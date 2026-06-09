@@ -89,7 +89,7 @@ model Video {
   fileSize Int?
   mimeType String?
 
-  duration  Int?
+  duration  String? @default("00:00")
   thumbnail String?
 
   projectId String

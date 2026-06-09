@@ -1,4 +1,5 @@
 import { MultipartUploader } from "@/lib/upload/upload";
+import { formatVideoDuration, readVideoMetadata } from "@/lib/utils";
 
 
 type UploadDeps = {
@@ -10,12 +11,21 @@ type UploadDeps = {
 
 export async function uploadVideo(file: File, deps: UploadDeps) {
 
+
+    // 0- extract duration
+    const duration = await readVideoMetadata(file);
+
+    const formattedduration = formatVideoDuration(duration);
+
+    console.log(formattedduration, "duree formatte");
+
     // 1 - create video
-    const video = await deps.createVideo({
+    const videocreated = await deps.createVideo({
         title: file.name,
         fileSize: file.size,
         mimeType: file.type,
         fileName: file.name,
+        duration: formattedduration,
         status: "UPLOADING",
         projectId: deps.projectId,
     });
@@ -31,12 +41,12 @@ export async function uploadVideo(file: File, deps: UploadDeps) {
 
     // 3 - update video
     await deps.updateVideo({
-        videoId: video.id,
+        videoId: videocreated.id,
         updateVideoData: {
             status: "PROCESSING",
             s3Key,
         },
     });
 
-    return { video, s3Key };
+    return { videocreated, s3Key };
 }

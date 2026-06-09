@@ -16,7 +16,7 @@ export default function VideoFilesList({ videos, projectId }: VideoFilesListProp
             </div>
 
             {/* BOUCLE SUR LES VIDÉOS EXISTANTES */}
-            <div className="flex gap-5 w-full h-full">{videos.map((video) => (
+            <div className="grid grid-cols-5 gap-5 w-full">{videos.map((video) => (
                 <VideosFilesCard key={video.id} video={video} />
             ))}</div>
 

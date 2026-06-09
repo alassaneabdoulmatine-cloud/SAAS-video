@@ -8,7 +8,7 @@ export const updateVideoSchema = z.object({
     fileSize: z.number().optional(),
     mimeType: z.string().optional(),
     status: z.string().optional(),
-    duration: z.number().optional(),
+    duration: z.string().optional(),
     thumbnail: z.string().optional(),
 })
 

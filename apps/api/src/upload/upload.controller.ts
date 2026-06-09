@@ -48,4 +48,10 @@ export class UploadController {
     await this.uploadService.abortMultipartUpload(body.key, body.uploadId);
     return { success: true };
   }
+
+  @Post('get-private-video-url')
+  async getPrivateVideoUrl(@Body() body: { videoKey: string }) {
+    const signedUrl = await this.uploadService.getPrivateVideoUrl(body.videoKey);
+    return { signedUrl };
+  }
 }

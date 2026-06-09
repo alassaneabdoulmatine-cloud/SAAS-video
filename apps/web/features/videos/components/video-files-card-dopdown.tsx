@@ -2,11 +2,25 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Download, Eye, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { Video } from "../types/video-type";
+import UpdateVideoModal from "./modals/update-video-modal";
+import { useState } from "react";
+import { DeleteVideoModal } from "./modals/delete-video-modal";
 
 type VideoFilesDropdownProps = {
     video: Video;
 }
 export default function VideoFilesDropdown({ video }: VideoFilesDropdownProps) {
+    const [openUpdateVideoModal, setOpenUpdateVideoModal] = useState(false)
+    const [openDeleteVideoModal, setOpenDeleteVideoModal] = useState(false)
+
+    function handleUpdateVideoModal() {
+        setOpenUpdateVideoModal(true)
+    }
+
+    function handleDeleteVideoModal() {
+        setOpenDeleteVideoModal(true)
+    }
+
     return (
         <div>
             <div className="relative z-40">
@@ -29,7 +43,7 @@ export default function VideoFilesDropdown({ video }: VideoFilesDropdownProps) {
                             </div>
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem className="flex items-center justify-between px-3 py-2 text-sm rounded-md cursor-pointer transition-colors focus:bg-muted focus:text-foreground">
+                        <DropdownMenuItem onClick={handleUpdateVideoModal} className="flex items-center justify-between px-3 py-2 text-sm rounded-md cursor-pointer transition-colors focus:bg-muted focus:text-foreground">
                             <div className="flex items-center gap-2.5">
                                 <Pencil className="h-4 w-4 text-muted-foreground" />
                                 <span>Renommer le fichier</span>
@@ -45,7 +59,7 @@ export default function VideoFilesDropdown({ video }: VideoFilesDropdownProps) {
 
                         <DropdownMenuSeparator className="my-1 bg-border/60" />
 
-                        <DropdownMenuItem className="flex items-center justify-between px-3 py-2 text-sm rounded-md cursor-pointer transition-colors text-destructive focus:bg-destructive/10 focus:text-destructive">
+                        <DropdownMenuItem onClick={handleDeleteVideoModal} className="flex items-center justify-between px-3 py-2 text-sm rounded-md cursor-pointer transition-colors text-destructive focus:bg-destructive/10 focus:text-destructive">
                             <div className="flex items-center gap-2.5">
                                 <Trash2 className="h-4 w-4" />
                                 <span className="font-medium">Supprimer</span>
@@ -54,7 +68,11 @@ export default function VideoFilesDropdown({ video }: VideoFilesDropdownProps) {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-        </div>
+            {/* MODAL UPDATE VIDEO  */}
+            <UpdateVideoModal open={openUpdateVideoModal} setOpen={setOpenUpdateVideoModal} video={video} />
 
+            {/* DELETE VIDEO MODAL */}
+            <DeleteVideoModal open={openDeleteVideoModal} setOpen={setOpenDeleteVideoModal} video={video} />
+        </div>
     );
 }

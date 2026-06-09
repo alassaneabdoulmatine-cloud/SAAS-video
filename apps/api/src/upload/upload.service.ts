@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { AbortMultipartUploadCommand, CompleteMultipartUploadCommand, CreateMultipartUploadCommand, S3Client, UploadPartCommand } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid'
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+import { getSignedUrl as getS3SignedUrl } from '@aws-sdk/s3-request-presigner'
+import { getSignedUrl as getCfSignedUrl } from "@aws-sdk/cloudfront-signer";
 
 @Injectable()
 export class UploadService {
@@ -59,7 +60,7 @@ export class UploadService {
         });
 
         // Longer expiration for large file parts
-        return await getSignedUrl(this.s3client, command, {
+        return await getS3SignedUrl(this.s3client, command, {
             expiresIn: 3600 // 1 hour
         });
     }
@@ -90,4 +91,25 @@ export class UploadService {
 
         await this.s3client.send(command);
     }
+
+    async getPrivateVideoUrl(videoKey: string) {
+        const cloudfrontDistributionUrl = this.configService.getOrThrow('CLOUDFRONT_DISTRIBUTION_URL');
+        const url = `${cloudfrontDistributionUrl}/${videoKey}`;
+
+        const privateKey = this.configService.getOrThrow('CLOUDFRONT_PRIVATE_KEY').replace(/\\n/g, "\n");
+        const keyPairId = this.configService.getOrThrow('CLOUDFRONT_KEY_PAIR_ID');
+
+        console.log("privateKey : ", privateKey);
+        console.log("keyPairId : ", keyPairId);
+
+        const signedUrl = getCfSignedUrl({
+            url: url,
+            keyPairId: keyPairId,
+            privateKey: privateKey,
+            dateLessThan: new Date(Date.now() + 1000 * 60 * 60).toISOString(), // Expire dans 1 heure
+        });
+
+        return signedUrl;
+    }
+
 }

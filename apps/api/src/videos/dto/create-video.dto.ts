@@ -36,8 +36,8 @@ export class CreateVideoDto {
     mimeType: string;
 
     @IsOptional()
-    @IsNumber()
-    duration: number;
+    @IsString({ message: "La durée doit être une chaîne de caractères" })
+    duration: string;
 
     @IsOptional()
     @IsString({ message: "La miniature doit être une chaîne de caractères" })
