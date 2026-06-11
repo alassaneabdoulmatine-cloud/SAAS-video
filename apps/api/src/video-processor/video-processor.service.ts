@@ -75,6 +75,15 @@ export class VideoProcessorService {
             return { transcription, tempThumbPath, thumbnailKey, stylizedSubtitles };
         } catch (error) {
             console.error(`[Pipeline Error] Échec du traitement pour la vidéo ${videoId}`, error);
+
+            try {
+                await this.videoService.update(videoId, {
+                    status: VideoStatus.FAILED,
+                }, projectId, workspaceId);
+            } catch (error) {
+                console.error(`[BDD Erreur] Impossible de passer le statut à FAILED pour ${videoId}:`, error);
+            }
+
             throw error;
         } finally {
             // Nettoyage rigoureux du VPS pour les DEUX fichiers temporaires
