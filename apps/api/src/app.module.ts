@@ -8,6 +8,8 @@ import { VideosModule } from './videos/videos.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { UploadModule } from './upload/upload.module';
 import { ConfigModule } from '@nestjs/config';
+import { BullModule } from '@nestjs/bullmq';
+import { VideoProcessorModule } from './video-processor/video-processor.module';
 
 @Module({
   imports: [
@@ -19,6 +21,14 @@ import { ConfigModule } from '@nestjs/config';
     ProjectsModule,
     VideosModule,
     AuthorizationModule,
-    UploadModule],
+    UploadModule,
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    VideoProcessorModule,
+  ],
 })
 export class AppModule { }
