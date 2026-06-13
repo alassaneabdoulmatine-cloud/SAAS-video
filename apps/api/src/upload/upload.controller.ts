@@ -8,11 +8,12 @@ export class UploadController {
 
   @Post('initiate')
   async initiateMultipart(
-    @Body() body: { filename: string; contentType: string; fileSize: number },
+    @Body() body: { filename: string; contentType: string; fileSize: number, videoId: string },
   ) {
     return await this.uploadService.initiateMultipartUpload(
       body.filename,
       body.contentType,
+      body.videoId
     );
   }
 

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { redirect } from "next/navigation";
 import { useMe } from "@/features/auth/hooks/useme";
 import { Toaster } from "sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -36,7 +37,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <TanstackProviders>
-          <main>{children}</main>
+          <main>
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
+          </main>
           <Toaster />
         </TanstackProviders>
       </body>

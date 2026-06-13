@@ -1,20 +1,26 @@
-import EditHeaderBar from "./editheaderbar";
-import WorkZone from "./workZone";
-import EditSidebar from "./editSidebar";
-import EditVidControleSidbar from "./editVidControleSidbar";
-import ModelSubSidbar from "./modelSubSidbar";
+"use client"
+
+import {
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
+} from "@/components/ui/resizable"
+import Timeline from "@/features/video-editor/components/timeline"
+import VideoZone from "@/features/video-editor/components/video-zone"
 
 export default function VideoEditorStudioLight() {
     return (
-        <div className="flex flex-col h-screen bg-[#fafafa] text-[#18181b] font-sans overflow-hidden antialiased">
-            <EditHeaderBar />
-            <div className="flex">
-                <EditSidebar />
-                <ModelSubSidbar />
-                <WorkZone />
-                <EditVidControleSidbar />
-            </div>
-
-        </div>
-    );
+        <ResizablePanelGroup
+            orientation="vertical"
+            className="h-full"
+        >
+            <ResizablePanel defaultSize="90%">
+                <VideoZone />
+            </ResizablePanel>
+            <ResizableHandle />
+            <ResizablePanel defaultSize="10%" minSize="10%" maxSize="10%">
+                <Timeline />
+            </ResizablePanel>
+        </ResizablePanelGroup>
+    )
 }
