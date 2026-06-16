@@ -46,7 +46,7 @@ export class FfmpegService {
     }
 
     /**
-     * 🖼️ ÉTAPE COMPLÉMENTAIRE : Extrait une miniature (JPEG) à la 1ère seconde de la vidéo
+     *      ÉTAPE COMPLÉMENTAIRE : Extrait une miniature (JPEG) à la 1ère seconde de la vidéo
      * @param videoUrl URL de la vidéo distante (CloudFront / S3)
      * @param videoId ID unique pour nommer l'image
      * @returns Le chemin absolu du fichier .jpg généré sur le VPS

@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
 import * as fs from 'fs';
 import { ConfigService } from '@nestjs/config';
@@ -17,6 +17,7 @@ export class OpenAiService {
 
     /**
      * Appelle l'API Whisper pour transcrire un fichier audio
+     * en lisant le fichier en flux depuis le disque dur du VPS
      */
     async transcribe(audioPath: string): Promise<any> {
         const audioFileStream = fs.createReadStream(audioPath);

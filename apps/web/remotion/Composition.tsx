@@ -1,11 +1,14 @@
-import { Img } from "remotion";
+import { AbsoluteFill, Img, Sequence } from "remotion";
+import { FadeIn } from "./FadeIn";
+import { MyVideo } from "./myvideo";
+
 
 
 
 export const MyComposition = () => {
     return (
-        <div className="w-full h-full bg-foreground">
-            <p className="text-white">This is a simple text composition with TailwindCSS applied.</p>
-        </div>
+        <AbsoluteFill>
+            <MyVideo />
+        </AbsoluteFill>
     );
 };
