@@ -1,52 +1,73 @@
+
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { Video } from '@remotion/media';
-import { Caption } from "@remotion/captions";
-
-
+import { Caption, createTikTokStyleCaptions } from "@remotion/captions";
+import { KaraokeGreenToken } from "./style-animation";
+import { SubtitleStyle } from "../types/subtitle-styles";
+import { useStyleVariantStore } from "../store/style-variant-store";
 
 type MyVideoCompositionProps = {
     videoSrc: string;
     subtitles: Caption[];
+    styleType: SubtitleStyle; // Reçu dynamiquement depuis ton UI Next.js
 };
 
-export const MyVideoComposition = ({ videoSrc, subtitles }: MyVideoCompositionProps) => {
+export const MyVideoComposition = ({ videoSrc, subtitles, styleType = 'karaoke-green' }: MyVideoCompositionProps) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
-
     const currentMs = (frame / fps) * 1000;
 
-    // Trouver si un mot doit s'afficher à la frame actuelle
-    const currentWord = subtitles.find(
-        (sub) => currentMs >= sub.startMs && currentMs <= sub.endMs
-    );
+    const subtitlewithspace = subtitles.map((subtitle, index) => {
+        return {
+            ...subtitle,
+            text: index === 0 ? subtitle.text : " " + subtitle.text,
+        };
+    });
+
+    const { pages } = createTikTokStyleCaptions({
+        captions: subtitlewithspace,
+        combineTokensWithinMilliseconds: 400,
+    });
+
+    const currentWords = pages.find(page => {
+        if (!page) return null;
+        return currentMs >= page.startMs && currentMs <= page.startMs + page.durationMs;
+    });
+
+    const word = currentWords?.tokens.find(token => {
+        return currentMs >= token.fromMs && currentMs <= token.toMs;
+    });
+
+    // 🚀 Sélection dynamique du composant de style (Zéro switch, Zéro if/else)
+    const { stylevariant } = useStyleVariantStore();
+    const DynamicTokenComponent = stylevariant || KaraokeGreenToken;
 
     return (
         <AbsoluteFill>
-            {/* 🎥 Calque 1 : La vidéo de fond (gérée de manière fluide par Remotion) */}
+            {/* Calque 1 : La vidéo de fond */}
             <AbsoluteFill>
                 <Video src={videoSrc} className="w-full h-full object-contain" />
             </AbsoluteFill>
 
-            {/* ✍️ Calque 2 : Les sous-titres IA superposés au centre */}
-            <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", paddingBottom: 100 }}>
-                {currentWord && (
-                    <div
-                        style={{
-                            color: "white",
-                            fontSize: 50,
-                            fontWeight: "bold",
-                            textShadow: "0px 4px 10px rgba(0,0,0,0.8)",
-                            fontFamily: "Impact, sans-serif",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: 10
-                        }}
-                    >
+            {/* Calque 2 : Les sous-titres superposés */}
+            <AbsoluteFill className="flex items-center justify-center pt-[300px]">
+                {currentWords && (
+                    <div className="flex flex-row flex-wrap items-center justify-center text-center max-w-[90%] whitespace-pre">
+                        {currentWords.tokens.map((token, index) => {
+                            const isCurrentActiveWord = token.text.toUpperCase() === word?.text.toUpperCase();
 
-
-                        {/* Le mot stylisé */}
-                        <span>{currentWord.text.toUpperCase()}</span>
+                            // 🚀 Rendu du composant dynamique avec injection des données temporelles Remotion
+                            return (
+                                <DynamicTokenComponent
+                                    key={index}
+                                    text={token.text}
+                                    isActive={isCurrentActiveWord}
+                                    frame={frame}
+                                    fps={fps}
+                                    fromMs={token.fromMs}
+                                />
+                            );
+                        })}
                     </div>
                 )}
             </AbsoluteFill>
@@ -55,55 +76,6 @@ export const MyVideoComposition = ({ videoSrc, subtitles }: MyVideoCompositionPr
 };
 
 
-// "use client";
 
-// import { AbsoluteFill, Video, useCurrentFrame, useVideoConfig } from "remotion";
-// import { createTikTokStyleCaptions, Caption } from "@remotion/captions";
 
-// type MyVideoCompositionProps = {
-//     videoSrc: string;
-//     subtitles: Caption[]; // 🚀 Reçoit le tableau typé officiel de Remotion
-// };
 
-// export const MyVideoComposition = ({ videoSrc, subtitles }: MyVideoCompositionProps) => {
-//     const frame = useCurrentFrame();
-//     const { fps } = useVideoConfig();
-
-//     // 1. 🔄 LA FORMULE CLÉ : Convertir la frame actuelle en Millisecondes
-//     const currentMs = (frame / fps) * 1000;
-
-//     // 2. ⚡ Utilisation de la fonction officielle de Remotion
-//     // On règle un temps de regroupement bas (ex: 200ms) pour garder l'effet mot par mot dynamique
-//     const { pages } = createTikTokStyleCaptions({
-//         captions: subtitles,
-//         combineTokensWithinMilliseconds: 2,
-//     });
-
-//     // 3. 🔍 Trouver la "page" de sous-titre active à la milliseconde actuelle
-//     const activePage = pages.find(
-//         (page) => currentMs >= page.startMs && currentMs <= page.startMs + page.durationMs
-//     );
-
-//     return (
-//         <AbsoluteFill className="bg-slate-950">
-//             {/* Ta vidéo en arrière-plan */}
-//             <Video src={videoSrc} className="w-full h-full object-cover" />
-
-//             {/* 🎤 Ton calque de sous-titres TikTok calé en ms */}
-//             {activePage && (
-//                 <AbsoluteFill className="justify-center items-center pointer-events-none pb-20">
-//                     <div
-//                         style={{
-//                             whiteSpace: "pre", // ⚠️ OBLIGATOIRE d'après la doc pour garder les espaces
-//                             textShadow: "5px 5px 0px #000000, -2px -2px 0px #000000, 2px -2px 0px #000000, -2px 2px 0px #000000",
-//                             fontFamily: "Impact, Montserrat, sans-serif",
-//                         }}
-//                         className="text-7xl font-black italic text-yellow-400 uppercase text-center max-w-[85%] tracking-wide animate-pop"
-//                     >
-//                         {activePage.text}
-//                     </div>
-//                 </AbsoluteFill>
-//             )}
-//         </AbsoluteFill>
-//     );
-// };

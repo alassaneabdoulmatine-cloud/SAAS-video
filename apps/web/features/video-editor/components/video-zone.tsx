@@ -1,73 +1,70 @@
 // "use client";
 
-// import { useState, useEffect } from "react";
+// import { useState, useEffect, useRef } from "react";
 // import { MyVideoComposition } from "./video-composition";
 // import { staticFile } from "remotion";
 // import { getMediaMetadata } from "@/lib/helpers";
-// import { Player } from "@remotion/player";
-// import { parseSrt } from "@remotion/captions";
+// import { Player, PlayerRef } from "@remotion/player";
+// import { parseSrt, Caption } from "@remotion/captions"; // ◄ Ajout du type Caption
+// import { useClickToPlayStore } from "../store/click-to=play-store";
 
 // export default function VideoPlayerPanel() {
 //     const [isShort, setIsShort] = useState(true);
 //     const width = isShort ? 1080 : 1920;
 //     const height = isShort ? 1920 : 1080;
+//     const { isPlaying } = useClickToPlayStore();
+//     const playerRef = useRef<PlayerRef>(null);
+
+//     useEffect(() => {
+//         if (isPlaying) {
+//             playerRef.current?.play();
+//         } else {
+//             playerRef.current?.pause();
+//         }
+//     }, [isPlaying]);
 
 //     const videoUrl = staticFile("/Top 5 languages (1).mp4");
 
 //     const [duration, setDuration] = useState<number>(30);
 //     const [isLoading, setIsLoading] = useState<boolean>(true);
-//     const [caption, setCaption] = useState<any>("");
 
-//     // Tes sous-titres
-//     const [subtitles, setSubtitles] = useState([
-//         { text: "Les", startFrame: 10, endFrame: 20, color: "#FFFFFF", emoji: null },
-//         { text: "5 LANGAGES", startFrame: 21, endFrame: 45, color: "#FFFF00", emoji: "🔥" },
-//         { text: "les plus", startFrame: 46, endFrame: 55, color: "#FFFFFF", emoji: null },
-//         { text: "utilisés", startFrame: 56, endFrame: 65, color: "#FFFFFF", emoji: null },
-//         { text: "en", startFrame: 66, endFrame: 70, color: "#FFFFFF", emoji: null },
-//         { text: "développement", startFrame: 71, endFrame: 90, color: "#FFFFFF", emoji: "💻" },
-//         { text: "web", startFrame: 91, endFrame: 95, color: "#FFFFFF", emoji: null },
-//         { text: "en", startFrame: 100, endFrame: 105, color: "#FFFFFF", emoji: null },
-//         { text: "2026", startFrame: 106, endFrame: 120, color: "#FF0000", emoji: "🚀" },
-//     ]);
+//     // 🚀 On stocke directement les sous-titres sous forme de tableau d'objets parsés
+//     const [parsedSubtitles, setParsedSubtitles] = useState<Caption[]>([]);
 
 //     useEffect(() => {
-//         async function getcaption() {
-//             const response = await fetch("/Top 5 languages (1).txt");
-//             const data = await response.text();
-//             setCaption(`${data}`);
-//         }
-//         getcaption();
-//     }, []);
-
-
-//     useEffect(() => {
-//         async function fetchVideoDuration() {
+//         async function initPlayer() {
 //             try {
-//                 // 🚀 Extraction via Mediabunny !
+//                 // 1. Charger le fichier SRT/TXT
+//                 const response = await fetch("/Top 5 languages (1).srt");
+//                 const srtText = await response.text();
+
+//                 // On parse immédiatement le SRT en tableau de Captions
+//                 const { captions } = parseSrt({ input: srtText });
+//                 setParsedSubtitles(captions);
+
+
+//                 // 2. Extraire la durée via Mediabunny
 //                 const metadata = await getMediaMetadata(videoUrl);
 //                 const totalFrames = Math.round(metadata.durationInSeconds * metadata.fps);
-
 //                 setDuration(totalFrames);
+
+//                 // Tout est prêt, on coupe le loader unique
 //                 setIsLoading(false);
 //             } catch (error) {
-//                 console.error("Erreur Mediabunny :", error);
+//                 console.error("Erreur lors de l'initialisation du Player :", error);
 //                 setIsLoading(false);
 //             }
 //         }
 
-//         fetchVideoDuration();
+//         initPlayer();
 //     }, [videoUrl]);
 
+//     // console.log("parsedSubtitles", parsedSubtitles);
+
+//     // On affiche le loader tant que la vidéo ET les sous-titres ne sont pas prêts
 //     if (isLoading) {
-//         return <div className="text-white text-sm p-4">Analyse Mediabunny en cours...</div>;
+//         return <div className="text-white text-sm p-4">Chargement des éléments...</div>;
 //     }
-
-//     const { captions } = parseSrt({ input: caption });
-
-//     console.log("==============================================");
-//     console.log(captions);
-//     console.log("==============================================");
 
 //     return (
 //         <div className="w-full h-full flex flex-col gap-2 items-center justify-center p-4 min-h-0 min-w-0">
@@ -76,10 +73,11 @@
 //                 ${isShort ? "h-full w-auto aspect-9/16" : "w-full h-auto aspect-video"}
 //             `}>
 //                 <Player
+//                     ref={playerRef}
 //                     component={MyVideoComposition}
 //                     inputProps={{
 //                         videoSrc: videoUrl,
-//                         subtitles: subtitles
+//                         subtitles: parsedSubtitles,
 //                     }}
 //                     durationInFrames={duration}
 //                     compositionWidth={width}
@@ -96,44 +94,59 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MyVideoComposition } from "./video-composition";
 import { staticFile } from "remotion";
 import { getMediaMetadata } from "@/lib/helpers";
-import { Player } from "@remotion/player";
-import { parseSrt, Caption } from "@remotion/captions"; // ◄ Ajout du type Caption
+import { Player, PlayerRef } from "@remotion/player";
+import { parseSrt, Caption } from "@remotion/captions";
+import { useClickToPlayStore } from "../store/click-to=play-store";
+import { useStyleVariantStore } from "../store/style-variant-store";
 
 export default function VideoPlayerPanel() {
     const [isShort, setIsShort] = useState(true);
     const width = isShort ? 1080 : 1920;
     const height = isShort ? 1920 : 1080;
 
+    // On récupère l'état courant du store
+    const { isPlaying, togglePlay } = useClickToPlayStore();
+    const { stylevariant } = useStyleVariantStore();
+
+    const playerRef = useRef<PlayerRef>(null);
     const videoUrl = staticFile("/Top 5 languages (1).mp4");
 
     const [duration, setDuration] = useState<number>(30);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    // 🚀 On stocke directement les sous-titres sous forme de tableau d'objets parsés
     const [parsedSubtitles, setParsedSubtitles] = useState<Caption[]>([]);
+
+
+    useEffect(() => {
+        const player = playerRef.current;
+        if (!player) return;
+
+        const playerIsPlaying = player.isPlaying();
+
+        // On force le play/pause uniquement s'il y a une vraie différence constatée
+        if (isPlaying && !playerIsPlaying) {
+            player.play();
+        } else if (!isPlaying && playerIsPlaying) {
+            player.pause();
+        }
+    }, [isPlaying]);
 
     useEffect(() => {
         async function initPlayer() {
             try {
-                // 1. Charger le fichier SRT/TXT
                 const response = await fetch("/Top 5 languages (1).srt");
                 const srtText = await response.text();
 
-                // On parse immédiatement le SRT en tableau de Captions
                 const { captions } = parseSrt({ input: srtText });
                 setParsedSubtitles(captions);
 
-
-                // 2. Extraire la durée via Mediabunny
                 const metadata = await getMediaMetadata(videoUrl);
                 const totalFrames = Math.round(metadata.durationInSeconds * metadata.fps);
                 setDuration(totalFrames);
 
-                // Tout est prêt, on coupe le loader unique
                 setIsLoading(false);
             } catch (error) {
                 console.error("Erreur lors de l'initialisation du Player :", error);
@@ -142,11 +155,8 @@ export default function VideoPlayerPanel() {
         }
 
         initPlayer();
-    }, [videoUrl]);
+    }, []);
 
-    // console.log("parsedSubtitles", parsedSubtitles);
-
-    // On affiche le loader tant que la vidéo ET les sous-titres ne sont pas prêts
     if (isLoading) {
         return <div className="text-white text-sm p-4">Chargement des éléments...</div>;
     }
@@ -158,10 +168,12 @@ export default function VideoPlayerPanel() {
                 ${isShort ? "h-full w-auto aspect-9/16" : "w-full h-auto aspect-video"}
             `}>
                 <Player
+                    ref={playerRef}
                     component={MyVideoComposition}
                     inputProps={{
                         videoSrc: videoUrl,
-                        subtitles: parsedSubtitles // 🚀 On envoie les vrais sous-titres dynamiques du SRT !
+                        subtitles: parsedSubtitles,
+                        styleType: stylevariant,
                     }}
                     durationInFrames={duration}
                     compositionWidth={width}

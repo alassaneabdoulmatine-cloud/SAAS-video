@@ -1,16 +1,16 @@
 "use client";
 
-import EditHeaderBar from "@/features/video-editor/components/editheaderbar";
-import EditSidebar from "@/features/video-editor/components/editSidebar";
-import StyleSidebar from "@/features/video-editor/components/style-sidbar";
+import EditTopBar from "@/features/video-editor/components/edit-Topbar";
+import EditSidebar from "@/features/video-editor/components/edit-sidebar";
+import StyleVariantsSidebar from "@/features/video-editor/components/style-variants-sidbar";
 
 export default function VideoLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className="h-dvh w-screen overflow-hidden flex flex-col bg-background text-foreground">
-            <EditHeaderBar />
+            <EditTopBar />
             <div className="flex flex-1 min-h-0 w-full">
                 <EditSidebar />
-                <StyleSidebar />
+                <StyleVariantsSidebar />
                 <div className="flex-1 min-h-0 min-w-0">
                     {children}
                 </div>
