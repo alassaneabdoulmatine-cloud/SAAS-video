@@ -2,8 +2,7 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { Video } from '@remotion/media';
 import { Caption, createTikTokStyleCaptions } from "@remotion/captions";
-import { KaraokeGreenToken } from "./style-animation";
-import { SubtitleStyle } from "../types/subtitle-styles";
+import { ClassicHighlightToken } from "./style-animation";
 import { useStyleVariantStore } from "../store/style-variant-store";
 
 type MyVideoCompositionProps = {
@@ -39,7 +38,7 @@ export const MyVideoComposition = ({ videoSrc, subtitles }: MyVideoCompositionPr
 
     //  Sélection dynamique du composant de style 
     const { stylevariant } = useStyleVariantStore();
-    const DynamicTokenComponent = stylevariant || KaraokeGreenToken;
+    const DynamicTokenComponent = stylevariant || ClassicHighlightToken;
 
     return (
         <AbsoluteFill>
