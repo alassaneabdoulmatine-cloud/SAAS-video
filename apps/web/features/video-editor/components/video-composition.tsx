@@ -9,10 +9,9 @@ import { useStyleVariantStore } from "../store/style-variant-store";
 type MyVideoCompositionProps = {
     videoSrc: string;
     subtitles: Caption[];
-    styleType: SubtitleStyle; // Reçu dynamiquement depuis ton UI Next.js
 };
 
-export const MyVideoComposition = ({ videoSrc, subtitles, styleType = 'karaoke-green' }: MyVideoCompositionProps) => {
+export const MyVideoComposition = ({ videoSrc, subtitles }: MyVideoCompositionProps) => {
     const frame = useCurrentFrame();
     const { fps } = useVideoConfig();
     const currentMs = (frame / fps) * 1000;
@@ -34,11 +33,11 @@ export const MyVideoComposition = ({ videoSrc, subtitles, styleType = 'karaoke-g
         return currentMs >= page.startMs && currentMs <= page.startMs + page.durationMs;
     });
 
-    const word = currentWords?.tokens.find(token => {
+    const currenttoken = currentWords?.tokens.find(token => {
         return currentMs >= token.fromMs && currentMs <= token.toMs;
     });
 
-    // 🚀 Sélection dynamique du composant de style (Zéro switch, Zéro if/else)
+    //  Sélection dynamique du composant de style 
     const { stylevariant } = useStyleVariantStore();
     const DynamicTokenComponent = stylevariant || KaraokeGreenToken;
 
@@ -54,14 +53,14 @@ export const MyVideoComposition = ({ videoSrc, subtitles, styleType = 'karaoke-g
                 {currentWords && (
                     <div className="flex flex-row flex-wrap items-center justify-center text-center max-w-[90%] whitespace-pre">
                         {currentWords.tokens.map((token, index) => {
-                            const isCurrentActiveWord = token.text.toUpperCase() === word?.text.toUpperCase();
+                            const isCurrentActiveToken = token.text.toUpperCase() === currenttoken?.text.toUpperCase();
 
-                            // 🚀 Rendu du composant dynamique avec injection des données temporelles Remotion
+                            // Rendu du composant dynamique avec injection des données temporelles Remotion
                             return (
                                 <DynamicTokenComponent
                                     key={index}
                                     text={token.text}
-                                    isActive={isCurrentActiveWord}
+                                    isActive={isCurrentActiveToken}
                                     frame={frame}
                                     fps={fps}
                                     fromMs={token.fromMs}

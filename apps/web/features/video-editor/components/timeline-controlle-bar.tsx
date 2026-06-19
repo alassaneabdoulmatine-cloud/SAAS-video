@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import {
     Play,
     Pause,
@@ -11,29 +12,52 @@ import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { useClickToPlayStore } from "../store/click-to=play-store";
+} from "@/components/ui/tooltip";
+import { useVideoEditor } from "../hooks/use-video-editor";
+import { CallbackListener } from "@remotion/player";
+
+// 🚀 Petite fonction utilitaire pour formater en MM:SS
+function formatTime(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
 
 export default function TimelineControlBar() {
-    // 💡 États locaux pour piloter l'interface (à connecter à ton store global ou Remotion plus tard)
-    const { isPlaying, togglePlay } = useClickToPlayStore();
-    const [currentTime, setCurrentTime] = useState("00:01");
-    const [totalTime, setTotalTime] = useState("01:40");
-    const [zoomValue, setZoomValue] = useState(50); // Pourcentage de zoom
+    const { isPlaying, togglePlay, seekRelative, playerRef, totalDuration } = useVideoEditor();
+    const timingRef = useRef<HTMLDivElement>(null);
+    const fps = 30;
 
+    useEffect(() => {
+        const playerInstance = playerRef.current;
+        if (!playerInstance) return;
+
+        const durationText = formatTime(totalDuration);
+
+        if (timingRef.current) {
+            timingRef.current.innerText = `00:00 / ${durationText}`;
+        }
+
+        // 2. 👑 Typage strict avec CallbackListener de Remotion pour éviter l'erreur TS
+        const onTimeUpdate: CallbackListener<"timeupdate"> = (e) => {
+            if (timingRef.current) {
+                const currentSeconds = e.detail.frame / fps;
+                timingRef.current.innerText = `${formatTime(currentSeconds)} / ${durationText}`;
+            }
+        };
+
+        playerInstance.addEventListener("timeupdate", onTimeUpdate);
+        return () => playerInstance.removeEventListener("timeupdate", onTimeUpdate);
+    }, [playerRef, fps, totalDuration]);
 
     return (
-        <div className="w-full h-14  flex items-center justify-center px-4 select-none text-zinc-200 font-sans text-sm">
-
-
-
-            {/* SECTION CENTRALE : Lecteur et Timecode (Style After Effects) */}
+        <div className="w-full h-14 flex items-center justify-center px-4 select-none text-zinc-200 font-sans text-sm">
             <div className="flex items-center justify-center gap-4">
-                {/* Boutons de transport */}
                 <div className="flex items-center gap-1">
+                    {/* BOUTON RECULER */}
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <button className="p-2 transition-colors bg-secondary/50 rounded-full hover:bg-secondary cursor-pointer">
+                            <button onClick={() => seekRelative(-1)} className="p-2 transition-colors bg-secondary/50 rounded-full hover:bg-secondary cursor-pointer">
                                 <SkipBack className="w-4 h-4 text-foreground" />
                             </button>
                         </TooltipTrigger>
@@ -42,6 +66,7 @@ export default function TimelineControlBar() {
                         </TooltipContent>
                     </Tooltip>
 
+                    {/* BOUTON PLAY / PAUSE */}
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <button
@@ -56,28 +81,27 @@ export default function TimelineControlBar() {
                         </TooltipContent>
                     </Tooltip>
 
+                    {/* BOUTON AVANCER */}
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <button className="p-2 transition-colors bg-secondary/50 rounded-full hover:bg-secondary cursor-pointer">
+                            <button onClick={() => seekRelative(1)} className="p-2 transition-colors bg-secondary/50 rounded-full hover:bg-secondary cursor-pointer">
                                 <SkipForward className="w-4 h-4 text-foreground" />
                             </button>
                         </TooltipTrigger>
                         <TooltipContent>
-                            <p>Add to library</p>
+                            <p>avancer d'une image</p>
                         </TooltipContent>
                     </Tooltip>
                 </div>
 
-                {/* Timecode digital */}
-                <div className="text-foreground text-sm font-mono flex gap-4">
-                    <span>{currentTime}</span>
-                    <span> / </span>
-                    <span>{totalTime}</span>
+                {/* 🚀 LE TIMER SYNCHRONISÉ SUPER PERFORMANT */}
+                <div
+                    ref={timingRef}
+                    className="text-foreground text-sm font-mono select-none"
+                >
+                    00:00 / 00:00
                 </div>
             </div>
-
         </div>
     );
 }
-
-
