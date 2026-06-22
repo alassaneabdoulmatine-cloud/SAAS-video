@@ -2,8 +2,8 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 import { Video } from '@remotion/media';
 import { Caption, createTikTokStyleCaptions } from "@remotion/captions";
-import { ClassicHighlightToken } from "./style-animation";
 import { useStyleVariantStore } from "../store/style-variant-store";
+import animation1 from "../styles-sub-animation/style-animation-1";
 
 type MyVideoCompositionProps = {
     videoSrc: string;
@@ -32,13 +32,15 @@ export const MyVideoComposition = ({ videoSrc, subtitles }: MyVideoCompositionPr
         return currentMs >= page.startMs && currentMs <= page.startMs + page.durationMs;
     });
 
-    const currenttoken = currentWords?.tokens.find(token => {
-        return currentMs >= token.fromMs && currentMs <= token.toMs;
-    });
+    const currentToken = currentWords?.tokens.find((token) => {
+        return (
+            currentMs >= token.fromMs && currentMs <= token.toMs
+        )
+    })
 
-    //  Sélection dynamique du composant de style 
+    // //  Sélection dynamique du composant de style 
     const { stylevariant } = useStyleVariantStore();
-    const DynamicTokenComponent = stylevariant || ClassicHighlightToken;
+    const DynamicWordsComponent = stylevariant || animation1;
 
     return (
         <AbsoluteFill>
@@ -50,23 +52,12 @@ export const MyVideoComposition = ({ videoSrc, subtitles }: MyVideoCompositionPr
             {/* Calque 2 : Les sous-titres superposés */}
             <AbsoluteFill className="flex items-center justify-center pt-[300px]">
                 {currentWords && (
-                    <div className="flex flex-row flex-wrap items-center justify-center text-center max-w-[90%] whitespace-pre">
-                        {currentWords.tokens.map((token, index) => {
-                            const isCurrentActiveToken = token.text.toUpperCase() === currenttoken?.text.toUpperCase();
-
-                            // Rendu du composant dynamique avec injection des données temporelles Remotion
-                            return (
-                                <DynamicTokenComponent
-                                    key={index}
-                                    text={token.text}
-                                    isActive={isCurrentActiveToken}
-                                    frame={frame}
-                                    fps={fps}
-                                    fromMs={token.fromMs}
-                                />
-                            );
-                        })}
-                    </div>
+                    <DynamicWordsComponent
+                        currentToken={currentToken}
+                        currentWords={currentWords}
+                        fps={fps}
+                        frame={frame}
+                        currentMs={currentMs} />
                 )}
             </AbsoluteFill>
         </AbsoluteFill>

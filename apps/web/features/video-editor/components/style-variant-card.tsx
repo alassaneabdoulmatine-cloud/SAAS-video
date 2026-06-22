@@ -7,7 +7,7 @@ interface StyleCardProps {
     variant: styleComponentType;
 }
 
-export default function StyleCard({ text, variant: VariantComponent }: StyleCardProps) {
+export default function StyleVariantCard({ text, variant: VariantComponent }: StyleCardProps) {
     const { stylevariant, setvariant } = useStyleVariantStore();
     const variantActive = stylevariant === VariantComponent;
     function handleChangeStyle() {

@@ -1,55 +1,21 @@
 "use client";
 
-import { BounceToken, ColorSweepToken, FocusBlurToken, GlassPillToken, GlowToken, SlideUpToken } from "./style-animation";
+import animation1 from "../styles-sub-animation/style-animation-1";
+import animation2 from "../styles-sub-animation/style-animation-2";
 import StyleVariantCard from "./style-variant-card";
 
 const styles = [
-    // {
-    //     id: 1,
-    //     text: "karaoke-green",
-    //     variant: KaraokeGreenToken,
-    // },
-    // {
-    //     id: 2,
-    //     text: "pop-zoom",
-    //     variant: PopZoomToken,
-    // },
-    // {
-    //     id: 3,
-    //     text: "minimal-fade",
-    //     variant: MinimalFadeToken,
-    // },
+    {
+        id: 1,
+        text: "animation1",
+        variant: animation1,
+    },
+    {
+        id: 2,
+        text: "animation2",
+        variant: animation2,
+    }
 
-    {
-        id: 4,
-        text: "bounce",
-        variant: BounceToken,
-    },
-    {
-        id: 5,
-        text: "glow",
-        variant: GlowToken,
-    },
-    {
-        id: 6,
-        text: "slide-up",
-        variant: SlideUpToken,
-    },
-    {
-        id: 7,
-        text: "glass-pill",
-        variant: GlassPillToken,
-    },
-    {
-        id: 8,
-        text: "color-sweep",
-        variant: ColorSweepToken,
-    },
-    {
-        id: 9,
-        text: "focus-blur",
-        variant: FocusBlurToken,
-    },
 
 ]
 
