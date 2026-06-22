@@ -1,17 +1,21 @@
 import { Check } from "lucide-react";
-import { styleComponentType } from "../types/style-component-type";
 import { useStyleVariantStore } from "../store/style-variant-store";
+import { useCombineTokensWithinMillisecondsStore } from "../store/combine-tokens-within-milliseconds-store";
+import { styleComponentType } from "../types/style-component-type";
 
 interface StyleCardProps {
     text: string;
     variant: styleComponentType;
+    combineTokensWithinMilliseconds: number
 }
 
-export default function StyleVariantCard({ text, variant: VariantComponent }: StyleCardProps) {
+export default function StyleVariantCard({ text, variant: VariantComponent, combineTokensWithinMilliseconds }: StyleCardProps) {
     const { stylevariant, setvariant } = useStyleVariantStore();
+    const { setCombineTokensWithinMilliseconds } = useCombineTokensWithinMillisecondsStore();
     const variantActive = stylevariant === VariantComponent;
     function handleChangeStyle() {
         setvariant(VariantComponent);
+        setCombineTokensWithinMilliseconds(combineTokensWithinMilliseconds);
     }
 
     return (
