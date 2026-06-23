@@ -1,46 +1,32 @@
-import { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import WordSubtitleEngine from "./WordSubtitleEngine";
+import WordSubtitleEngine, { SUBTITLE_CLASS } from "./WordSubtitleEngine";
 
-// Elastic Bounce — rebond spring sur le mot actif
-function getBounceElasticStyle({
-    frame,
-    tokenStartFrame,
+function getHighlightStyle({
     isCurrentToken,
-    layerLength,
 }: {
-    frame: number;
-    fps: number;
-    tokenStartFrame: number;
-    tokenEndFrame: number;
     isCurrentToken: boolean;
-    layerLength: number;
 }): CSSProperties {
-    if (!isCurrentToken) {
-        return {
-            opacity: 0.6,
-            textShadow: "0 2px 4px rgba(0,0,0,0.5)",
-        };
-    }
-
-    const progress = frame - tokenStartFrame;
-    const d = layerLength;
-
-    const scale = interpolate(
-        progress,
-        [0, d * 0.2, d * 0.4, d * 0.6, d * 0.8],
-        [0.8, 1.25, 0.92, 1.05, 1.0],
-        { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-    );
-
     return {
-        transform: `scale(${scale})`,
-        color: "#F8FAFC",
-        textShadow: "0 4px 8px rgba(0,0,0,0.6), 0 0 4px rgba(255,255,255,0.2)",
+        color: isCurrentToken ? "red" : "black",
     };
 }
-
 export default function Animation11(props: AnimationProps) {
-    return <WordSubtitleEngine {...props} getStyle={getBounceElasticStyle} />;
+    const wordstartFrame = props.currentWords ? (props.currentWords?.startMs / 1000) * props.fps : 0
+    const wordEndFrame = props.currentWords ? wordstartFrame + (props.currentWords?.durationMs / 1000) * props.fps : 0
+    const layerLength = wordEndFrame - wordstartFrame
+    const fortyPercentOfLayer = layerLength * 0.4
+    const middleFrame = wordstartFrame + fortyPercentOfLayer
+
+
+    return (
+        <div className="flex flex-col flex-wrap  gap-1">
+            <div
+                className={`${SUBTITLE_CLASS} text-black bg-white rounded-sm p-4 text-center`}
+            >
+                <WordSubtitleEngine {...props} getStyle={getHighlightStyle} />
+            </div>
+        </div>
+    );
 }
