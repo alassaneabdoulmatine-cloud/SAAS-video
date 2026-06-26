@@ -1,5 +1,5 @@
 import { AnimationProps } from "../types/animation-props-type";
-import { SUBTITLE_CLASS } from "./WordSubtitleEngine";
+import { SUBTITLE_CLASS } from "./share-component/WordSubtitleEngine";
 
 export default function animation3({ currentWords }: AnimationProps) {
     const words = currentWords?.text.split(" ") ?? [];

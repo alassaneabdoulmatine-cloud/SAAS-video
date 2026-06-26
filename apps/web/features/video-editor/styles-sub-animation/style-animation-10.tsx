@@ -1,6 +1,6 @@
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import { SUBTITLE_CLASS } from "./WordSubtitleEngine";
+import { SUBTITLE_CLASS } from "./share-component/WordSubtitleEngine";
 
 export default function Animation10({ currentWords, frame, fps }: AnimationProps) {
     const wordstartFrame = currentWords ? (currentWords?.startMs / 1000) * fps : 0

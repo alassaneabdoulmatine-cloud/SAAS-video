@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { AnimationProps } from "../types/animation-props-type";
-import WordSubtitleEngine from "./WordSubtitleEngine";
+import WordSubtitleEngine from "./share-component/WordSubtitleEngine";
 
 // Highlight — mot actif en jaune, les autres en blanc
 function getHighlightStyle({

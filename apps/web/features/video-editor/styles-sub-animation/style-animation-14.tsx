@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import WordSubtitleEngine from "./WordSubtitleEngine";
+import WordSubtitleEngine from "./share-component/WordSubtitleEngine";
 
 // Cinematic Tracking — lettre-espacement qui s'élargit sur le mot actif
 function getCinematicTrackingStyle({
@@ -21,9 +21,9 @@ function getCinematicTrackingStyle({
 
     const letterSpacing = isCurrentToken
         ? `${interpolate(frame, [tokenStartFrame, middleFrame], [0, 6], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-          })}px`
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+        })}px`
         : "0px";
 
     return {

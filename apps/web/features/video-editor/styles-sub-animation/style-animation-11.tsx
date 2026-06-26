@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import WordSubtitleEngine, { SUBTITLE_CLASS } from "./WordSubtitleEngine";
+import WordSubtitleEngine, { SUBTITLE_CLASS } from "./share-component/WordSubtitleEngine";
 
 function getHighlightStyle({
     isCurrentToken,

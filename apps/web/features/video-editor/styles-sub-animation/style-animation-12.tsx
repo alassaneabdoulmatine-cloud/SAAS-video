@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import WordSubtitleEngine from "./WordSubtitleEngine";
+import WordSubtitleEngine from "./share-component/WordSubtitleEngine";
 
 // Yellow Underline Slide — soulignement jaune animé sur le mot actif
 function getUnderlineSlideStyle({
@@ -21,9 +21,9 @@ function getUnderlineSlideStyle({
 
     const borderBottomWidth = isCurrentToken
         ? interpolate(frame, [tokenStartFrame, middleFrame], [0, 4], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-          })
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+        })
         : 0;
 
     return {

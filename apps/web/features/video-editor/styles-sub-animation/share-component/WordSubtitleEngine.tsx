@@ -1,5 +1,5 @@
 import React from "react";
-import { AnimationProps } from "../types/animation-props-type";
+import { AnimationProps } from "../../types/animation-props-type";
 
 // Centralized typography styles. Changing this changes text size/styling in all animations!
 export const SUBTITLE_CLASS = "text-6xl font-bold uppercase";

@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 import { AnimationProps } from "../types/animation-props-type";
-import WordSubtitleEngine from "./WordSubtitleEngine";
+import WordSubtitleEngine from "./share-component/WordSubtitleEngine";
 
 // Only Show Active — seul le mot actif est visible
 function getOnlyActiveStyle({

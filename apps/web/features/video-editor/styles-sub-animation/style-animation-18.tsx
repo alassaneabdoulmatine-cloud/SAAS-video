@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import WordSubtitleEngine from "./WordSubtitleEngine";
+import WordSubtitleEngine from "./share-component/WordSubtitleEngine";
 
 // Gradient Warm Glow — halo ambre + rouge sur le mot actif, comme un feu
 function getGradientWarmStyle({
@@ -20,9 +20,9 @@ function getGradientWarmStyle({
     const middleFrame = tokenStartFrame + layerLength * 0.4;
     const scale = isCurrentToken
         ? interpolate(frame, [tokenStartFrame, middleFrame], [0.95, 1.15], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-          })
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+        })
         : 1.0;
 
     return {

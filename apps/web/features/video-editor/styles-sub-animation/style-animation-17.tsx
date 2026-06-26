@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import WordSubtitleEngine from "./WordSubtitleEngine";
+import WordSubtitleEngine from "./share-component/WordSubtitleEngine";
 
 // Outline Highlight — contour noir épais + rouge vif sur le mot actif
 function getOutlineHighlightStyle({
@@ -20,9 +20,9 @@ function getOutlineHighlightStyle({
     const middleFrame = tokenStartFrame + layerLength * 0.4;
     const scale = isCurrentToken
         ? interpolate(frame, [tokenStartFrame, middleFrame], [0.95, 1.12], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-          })
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+        })
         : 1.0;
 
     return {

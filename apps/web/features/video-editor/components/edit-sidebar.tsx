@@ -1,8 +1,13 @@
 'use client';
-import { Captions, Palette, Settings, Type } from "lucide-react";
+import { Captions, Home, Palette, Settings, Type } from "lucide-react";
 import { useState } from "react";
 const tabs = [
 
+    {
+        id: "home",
+        label: "Accueil",
+        icon: Home,
+    },
     {
         id: "style",
         label: "Style",
@@ -13,11 +18,11 @@ const tabs = [
         label: "Sous-titres",
         icon: Captions,
     },
-    {
-        id: "text",
-        label: "Texte",
-        icon: Type,
-    },
+    // {
+    //     id: "text",
+    //     label: "Texte",
+    //     icon: Type,
+    // },
     {
         id: "parametre",
         label: "Parametre",
@@ -27,7 +32,7 @@ const tabs = [
 export default function EditSidebar() {
     const [activeTab, setActiveTab] = useState(tabs[0].id);
     return (
-        <div className="h-full">
+        <div className="h-full bg-muted/40">
             <aside className="w-[76px] border-r border-border flex flex-col items-center py-4 gap-4 h-full">
                 {tabs.map((tab) => (
                     <div className="flex flex-col items-center gap-1 cursor-pointer w-full px-1" key={tab.id} onClick={() => setActiveTab(tab.id)}>

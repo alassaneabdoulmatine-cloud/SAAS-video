@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import WordSubtitleEngine from "./WordSubtitleEngine";
+import WordSubtitleEngine from "./share-component/WordSubtitleEngine";
 
 // Rotational Tilt — rotation légère + scale sur le mot actif en violet
 function getRotationalTiltStyle({
@@ -21,16 +21,16 @@ function getRotationalTiltStyle({
 
     const rotate = isCurrentToken
         ? interpolate(frame, [tokenStartFrame, middleFrame], [-8, 0], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-          })
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+        })
         : 0;
 
     const scale = isCurrentToken
         ? interpolate(frame, [tokenStartFrame, middleFrame], [0.85, 1.1], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-          })
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+        })
         : 1.0;
 
     return {

@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import WordSubtitleEngine from "./WordSubtitleEngine";
+import WordSubtitleEngine from "./share-component/WordSubtitleEngine";
 
 // Skew Dynamic — inclinaison italique + montée sur le mot actif en vert
 function getSkewDynamicStyle({
@@ -21,23 +21,23 @@ function getSkewDynamicStyle({
 
     const skewX = isCurrentToken
         ? interpolate(frame, [tokenStartFrame, middleFrame], [0, -12], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-          })
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+        })
         : 0;
 
     const translateY = isCurrentToken
         ? interpolate(frame, [tokenStartFrame, middleFrame], [0, -8], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-          })
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+        })
         : 0;
 
     const scale = isCurrentToken
         ? interpolate(frame, [tokenStartFrame, middleFrame], [1.0, 1.12], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-          })
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp",
+        })
         : 1.0;
 
     return {

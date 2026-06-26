@@ -1,6 +1,6 @@
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import { SUBTITLE_CLASS } from "./WordSubtitleEngine";
+import { SUBTITLE_CLASS } from "./share-component/WordSubtitleEngine";
 
 export default function Animation8({ currentWords, frame, fps }: AnimationProps) {
     const words = currentWords?.text.split(" ") ?? [];

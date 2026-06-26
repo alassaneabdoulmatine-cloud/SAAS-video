@@ -4,7 +4,7 @@ import TimelineControlBar from "./timeline-controlle-bar";
 export default function Timeline() {
     return (
 
-        <div >
+        <div>
             <TimelineControlBar />
         </div>
 

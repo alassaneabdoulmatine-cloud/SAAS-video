@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", inter.className, "font-sans", inter.variable)}
+      className={cn("h-full", "antialiased", inter.className, "font-sans", inter.variable, "dark")}
     >
       <body className="min-h-full flex flex-col">
         <TanstackProviders>

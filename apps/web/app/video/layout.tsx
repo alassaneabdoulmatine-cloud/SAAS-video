@@ -9,14 +9,13 @@ export default function VideoLayout({ children }: { children: React.ReactNode })
     return (
         <VideoEditorProvider>
             <div className="h-dvh w-screen overflow-hidden flex flex-col bg-background text-foreground">
-                <EditTopBar />
-                <div className="flex flex-1 min-h-0 w-full">
+                <div className="flex flex-1 min-h-0 min-w-0">
                     <EditSidebar />
-                    <StyleVariantsSidebar />
                     <div className="flex-1 min-h-0 min-w-0">
                         {children}
                     </div>
                 </div>
+
             </div>
         </VideoEditorProvider>
     );

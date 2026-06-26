@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import { Easing, interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import WordSubtitleEngine from "./WordSubtitleEngine";
+import WordSubtitleEngine from "./share-component/WordSubtitleEngine";
 
 // Opacity Fade — fade-in avec easing cubic sur chaque token
 function getOpacityFadeStyle({

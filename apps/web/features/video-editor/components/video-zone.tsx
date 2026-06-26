@@ -46,7 +46,7 @@ export default function VideoPlayerPanel() {
     if (isLoading) return <div className="text-white text-sm p-4">Chargement...</div>;
 
     return (
-        <div className="w-full h-full flex items-center justify-center p-4">
+        <div className="w-full h-full flex items-center justify-center p-4 bg-background">
             <div className={isShort ? "h-full aspect-9/16" : "w-full aspect-video"}>
                 <Player
                     ref={setPlayerRef} // Connecté au contexte !
