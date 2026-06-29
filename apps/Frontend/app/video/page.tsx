@@ -6,7 +6,7 @@ import {
     ResizablePanelGroup,
 } from "@/components/ui/resizable"
 import { EditPanelTopBar } from "@/features/video-editor/components/edit-panel-components/edit-panel-topbar"
-import TextStylePanel from "@/features/video-editor/components/edit-panel-components/TextStylePanel-components/TextStylePanel"
+import TextStylePanel from "@/features/video-editor/components/edit-panel-components/TextStylePanel-components/style-base-components/texte-Style-bases"
 
 import EditSidebar from "@/features/video-editor/components/edit-sidebar"
 import StyleVariantsSidebar from "@/features/video-editor/components/style-variants-sidbar"

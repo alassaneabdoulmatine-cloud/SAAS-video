@@ -125,12 +125,14 @@ export default function WordSubtitleEngine({ currentToken, currentWords, fps, fr
                 });
 
                 return (
+
                     <span
                         key={`${token.text}-${token.fromMs}-${index}`}
                         style={{
                             ...dynamicStyle,
                             ...animatedStyle,
-                        }}
+                        }
+                        }
                     >
                         {token.text}
                     </span>

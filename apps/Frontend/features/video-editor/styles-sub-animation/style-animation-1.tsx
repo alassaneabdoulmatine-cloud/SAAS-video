@@ -19,5 +19,7 @@ function getOnlyActiveStyle({
 }
 
 export default function Animation1(props: AnimationProps) {
-    return <WordSubtitleEngine {...props} getStyle={getOnlyActiveStyle} />;
+    return <div className="flex justify-center gap-1">
+        <WordSubtitleEngine {...props} getStyle={getOnlyActiveStyle} />
+    </div>;
 }
