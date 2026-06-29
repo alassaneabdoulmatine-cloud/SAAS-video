@@ -9,7 +9,7 @@ import FontMotifSection from "./font-motif-section";
 export default function TextStylePanel() {
 
     return (
-        <div className="w-full p-6 space-y-6 select-none font-sans rounded-lg">
+        <div className="w-full  space-y-6 select-none font-sans rounded-lg">
             <FontFamilySection />
             <FontSizeSection />
             <FontMotifSection />

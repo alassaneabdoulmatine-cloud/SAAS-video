@@ -5,6 +5,7 @@ import {
     ResizablePanel,
     ResizablePanelGroup,
 } from "@/components/ui/resizable"
+import { EditPanelTopBar } from "@/features/video-editor/components/edit-panel-components/edit-panel-topbar"
 import TextStylePanel from "@/features/video-editor/components/edit-panel-components/TextStylePanel-components/TextStylePanel"
 
 import EditSidebar from "@/features/video-editor/components/edit-sidebar"
@@ -37,7 +38,8 @@ export default function VideoEditorStudioLight() {
 
                     {/* content zone */}
                     <ResizablePanel defaultSize="30%" className="bg-muted/40">
-                        <TextStylePanel />
+                        <EditPanelTopBar />
+                        {/* <TextStylePanel /> */}
                     </ResizablePanel>
                 </ResizablePanelGroup>
             </ResizablePanel>

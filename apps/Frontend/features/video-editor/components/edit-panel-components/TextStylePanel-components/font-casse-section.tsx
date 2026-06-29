@@ -1,6 +1,7 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useState } from "react";
+import { useTextStylePropertiesStore } from "@/features/video-editor/store/text-style-properties-store";
 
 const casings = [
     { id: 1, value: "uppercase", label: "Majuscules", icon: "TT" },
@@ -9,7 +10,7 @@ const casings = [
 ];
 
 export default function FontCasseSection() {
-    const [casing, setCasing] = useState<string>("uppercase");
+    const { casing, setCasing } = useTextStylePropertiesStore();
     return (
         <div className="flex max-w-xs items-center justify-between gap-4">
             <label className="text-sm w-32">Casse</label>

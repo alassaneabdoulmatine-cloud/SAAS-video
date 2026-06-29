@@ -2,6 +2,7 @@ import { AlignLeft, AlignCenter, AlignRight, AlignJustify } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState } from "react";
+import { useTextStylePropertiesStore } from "@/features/video-editor/store/text-style-properties-store";
 
 const alignments = [
     { value: "left", icon: AlignLeft, label: "Gauche" },
@@ -13,7 +14,7 @@ const alignments = [
 ];
 
 export default function AlignementSection() {
-    const [alignment, setAlignment] = useState("center");
+    const { alignment, setAlignment } = useTextStylePropertiesStore();
     return (
         <div className="flex max-w-xs items-center justify-between gap-4">
             <label className="text-sm w-32">Alignement</label>

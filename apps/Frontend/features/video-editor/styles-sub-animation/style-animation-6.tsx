@@ -1,6 +1,6 @@
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import { SUBTITLE_CLASS } from "./share-component/WordSubtitleEngine";
+import { useTextStylePropertiesStore } from "../store/text-style-properties-store";
 
 export default function animation6({ currentWords, frame, fps }: AnimationProps) {
 
@@ -10,8 +10,22 @@ export default function animation6({ currentWords, frame, fps }: AnimationProps)
     const fortyPercentOfLayer = layerLength * 0.4;
     const middleFrame = wordStartFrame + fortyPercentOfLayer;
 
+    const { fontFamily, fontSize, styles, casing, color, letterSpacing, lineHeight, alignment } = useTextStylePropertiesStore();
 
-    const boxStyle = `${SUBTITLE_CLASS} text-white`;
+    const dynamicStyle: React.CSSProperties = {
+        fontFamily,
+        fontSize,
+        color,
+        letterSpacing,
+        lineHeight,
+        textAlign: alignment as React.CSSProperties["textAlign"],
+
+        fontWeight: styles.includes("bold") ? "bold" : "normal",
+        fontStyle: styles.includes("italic") ? "italic" : "normal",
+        textDecoration: styles.includes("underline") ? "underline" : "none",
+
+        textTransform: casing as React.CSSProperties["textTransform"],
+    };
 
     const scale = interpolate(
         frame,
@@ -25,7 +39,8 @@ export default function animation6({ currentWords, frame, fps }: AnimationProps)
 
     return (
         <div className="flex flex-col gap-1">
-            <div className={boxStyle} style={{
+            <div style={{
+                ...dynamicStyle,
                 transform: `scale(${scale})`
             }}>{currentWords?.text}</div>
         </div>

@@ -1,7 +1,7 @@
 "use client"
-import { useState } from "react";
+import { useTextStylePropertiesStore } from "@/features/video-editor/store/text-style-properties-store";
 export default function FontColorSection() {
-    const [color, setColor] = useState("#ffffff");
+    const { color, setColor } = useTextStylePropertiesStore();
     return (
         <div className="flex max-w-xs items-center justify-between gap-4">
             <label className="text-sm w-32">Couleur</label>

@@ -1,6 +1,6 @@
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import { SUBTITLE_CLASS } from "./share-component/WordSubtitleEngine";
+import { useTextStylePropertiesStore } from "../store/text-style-properties-store";
 
 export default function Animation8({ currentWords, frame, fps }: AnimationProps) {
     const words = currentWords?.text.split(" ") ?? [];
@@ -25,17 +25,32 @@ export default function Animation8({ currentWords, frame, fps }: AnimationProps)
         }
     )
 
-    const boxStyle = `${SUBTITLE_CLASS} text-black p-4 text-center bg-white`;
+    const { fontFamily, fontSize, styles, casing, color, letterSpacing, lineHeight, alignment } = useTextStylePropertiesStore();
+
+    const dynamicStyle: React.CSSProperties = {
+        fontFamily,
+        fontSize,
+        color,
+        letterSpacing,
+        lineHeight,
+        textAlign: alignment as React.CSSProperties["textAlign"],
+
+        fontWeight: styles.includes("bold") ? "bold" : "normal",
+        fontStyle: styles.includes("italic") ? "italic" : "normal",
+        textDecoration: styles.includes("underline") ? "underline" : "none",
+
+        textTransform: casing as React.CSSProperties["textTransform"],
+    };
 
     return (
         <div className="flex flex-col gap-1">
             {isLongText ? (
                 <div className="flex flex-col gap-1 flex-wrap max-w-3xl justify-center items-center">
-                    <div className={boxStyle} style={{ transform: `scale(${scale})` }}>{firstLineWords}</div>
-                    <div className={boxStyle} style={{ transform: `scale(${scale})` }}>{secondLineWords}</div>
+                    <div style={{ ...dynamicStyle, transform: `scale(${scale})` }}>{firstLineWords}</div>
+                    <div style={{ ...dynamicStyle, transform: `scale(${scale})` }}>{secondLineWords}</div>
                 </div>
             ) : (
-                <div className={boxStyle} style={{ transform: `scale(${scale})` }}>{completwords}</div>
+                <div style={{ ...dynamicStyle, transform: `scale(${scale})` }}>{completwords}</div>
             )}
         </div>
     );

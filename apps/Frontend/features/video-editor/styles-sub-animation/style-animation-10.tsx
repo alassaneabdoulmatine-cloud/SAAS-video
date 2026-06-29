@@ -1,6 +1,5 @@
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
-import { SUBTITLE_CLASS } from "./share-component/WordSubtitleEngine";
 
 export default function Animation10({ currentWords, frame, fps }: AnimationProps) {
     const wordstartFrame = currentWords ? (currentWords?.startMs / 1000) * fps : 0
@@ -21,7 +20,7 @@ export default function Animation10({ currentWords, frame, fps }: AnimationProps
 
     return (
         <div className="flex flex-col gap-1">
-            <div className={`${SUBTITLE_CLASS} text-white`} style={{ transform: `scale(${scale})` }}>{currentWords?.text}</div>
+            <div className="text-white" style={{ transform: `scale(${scale})` }}>{currentWords?.text}</div>
         </div>
     );
 }

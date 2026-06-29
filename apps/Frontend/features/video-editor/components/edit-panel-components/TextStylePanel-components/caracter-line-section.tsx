@@ -1,10 +1,10 @@
 "use client"
 
+import { useTextStylePropertiesStore } from "@/features/video-editor/store/text-style-properties-store";
 import { useState } from "react";
 
 export default function CharacterLineSection() {
-    const [letterSpacing, setLetterSpacing] = useState(0);
-    const [lineHeight, setLineHeight] = useState(0);
+    const { letterSpacing, lineHeight, setLetterSpacing, setLineHeight } = useTextStylePropertiesStore();
 
     function handleLetterSpacing(number: number) {
         setLetterSpacing(letterSpacing + number)
