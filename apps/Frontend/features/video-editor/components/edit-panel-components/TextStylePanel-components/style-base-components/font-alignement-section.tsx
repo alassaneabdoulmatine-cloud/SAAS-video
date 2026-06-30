@@ -20,7 +20,7 @@ export default function AlignementSection() {
             <label className="text-sm w-32">Alignement</label>
             <div className="w-full flex justify-start">
                 <TooltipProvider delayDuration={300}>
-                    <ToggleGroup type="single" value={alignment} onValueChange={(v) => v && setAlignment(v)} className="gap-1 bg-muted p-0.5 rounded w-full justify-between">
+                    <ToggleGroup type="single" value={alignment} onValueChange={(v) => v && setAlignment(v)} className="gap-1 bg-muted p-0.5 border border-border w-full justify-between rounded-sm">
                         {alignments.map(({ value, icon: Icon, label }) => (
                             <ToggleGroupItem value={value} className="data-[state=on]:bg-background rounded-sm h-8 flex-1 p-0 text-xs font-mono">
                                 {Icon ? <Icon className="h-4 w-4" /> : "|||"}

@@ -15,8 +15,9 @@ import {
 import TextStylePanel from "./TextStylePanel-components/style-base-components/texte-Style-bases"
 import { Button } from "@/components/ui/button"
 import TextStyleBase from "./TextStylePanel-components/style-base-components/texte-Style-bases";
-import TextStrokeSection from "./TextStylePanel-components/style-text-line-components/TextStrokeSection";
+import TextStrokeSection from "./TextStylePanel-components/style-text-line-components/text-stroke-section";
 import TextShadowSection from "./TextStylePanel-components/style-shadow-components/TextShadowSection";
+import { Separator } from "@/components/ui/separator";
 
 const tabs = [
 
@@ -57,9 +58,14 @@ export function EditPanelTopBar() {
             </div>
 
             <TabsContent value="text" className="px-6 py-4">
-                <TextStyleBase />
-                <TextStrokeSection />
-                <TextShadowSection />
+                <div className="space-y-4">
+
+                    <TextStyleBase />
+                    <Separator />
+                    <TextStrokeSection />
+                    <Separator />
+                    <TextShadowSection />
+                </div>
             </TabsContent>
             <TabsContent value="sous-titre" className="px-6 py-4">
                 <div>contenu sous titre</div>

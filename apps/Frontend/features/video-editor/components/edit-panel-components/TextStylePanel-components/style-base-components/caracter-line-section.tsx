@@ -16,7 +16,7 @@ export default function CharacterLineSection() {
         <div className="flex max-w-xs items-center justify-between gap-4">
             <div className="flex items-center gap-2 flex-1">
                 <label className="text-sm ">Caractère</label>
-                <div className="flex items-center bg-muted rounded px-2 h-8 w-20 justify-between">
+                <div className="flex items-center bg-muted rounded-sm px-2 h-8 w-20 justify-between border border-border">
                     <input
                         type="number"
                         value={letterSpacing}
@@ -32,7 +32,7 @@ export default function CharacterLineSection() {
 
             <div className="flex items-center gap-2 flex-1 justify-end">
                 <label className="text-sm ">Ligne</label>
-                <div className="flex items-center bg-muted rounded px-2 h-8 w-20 justify-between">
+                <div className="flex items-center bg-muted rounded-sm px-2 h-8 w-20 justify-between border border-border">
                     <input
                         type="number"
                         value={lineHeight}

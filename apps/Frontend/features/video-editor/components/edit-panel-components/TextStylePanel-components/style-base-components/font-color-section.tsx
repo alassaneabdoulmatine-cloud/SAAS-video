@@ -7,7 +7,7 @@ export default function FontColorSection() {
             <label className="text-sm w-32">Couleur</label>
             <div className="w-full flex items-center gap-2">
                 {/* Input de type color customisé pour ressembler à ton dropdown blanc */}
-                <div className="relative flex items-center bg-muted rounded p-1 h-9 w-24 justify-between cursor-pointer">
+                <div className="relative flex items-center bg-muted rounded-sm p-1 h-8 w-28 justify-between cursor-pointer border border-border">
                     <div
                         className="w-full h-full rounded border border-muted"
                         style={{ backgroundColor: color }}

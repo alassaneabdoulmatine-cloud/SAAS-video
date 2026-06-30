@@ -17,7 +17,7 @@ export default function FontMotifSection() {
             <label className="text-sm  w-32">Motif</label>
             <div className="w-full flex justify-start">
                 <TooltipProvider delayDuration={300}>
-                    <ToggleGroup type="multiple" value={styles} onValueChange={setStyles} className="gap-1 bg-muted p-0.5 rounded">
+                    <ToggleGroup type="multiple" value={styles} onValueChange={setStyles} className="gap-1 bg-muted p-0.5 border border-border rounded-sm">
                         {motifs.map((motif) => (
 
                             <ToggleGroupItem key={motif.id} value={motif.value} aria-label={motif.label} className="data-[state=on]:bg-background rounded-sm h-8 w-10 p-0">

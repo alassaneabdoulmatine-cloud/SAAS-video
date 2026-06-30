@@ -24,8 +24,8 @@ export default function FontSizeSection() {
                     className="flex-1 cursor-pointer"
                 />
                 {/* Un conteneur input stylé type "spin-button" comme sur ta capture */}
-                <div className="flex items-center bg-muted rounded px-2 h-9 w-16 justify-between border-none">
-                    <span className="text-sm font-semibold">{fontSize}</span>
+                <div className="flex items-center bg-muted rounded-sm px-2 h-9 w-16 justify-between border border-border">
+                    <span className="text-sm font-semibold ">{fontSize}</span>
                     <div className="flex flex-col text-[10px] text-foreground select-none">
                         <span className="cursor-pointer hover:text-foreground/80"
                             onClick={() => setFontSize(fontSize + 1)}

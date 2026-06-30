@@ -15,7 +15,7 @@ export default function FontCasseSection() {
         <div className="flex max-w-xs items-center justify-between gap-4">
             <label className="text-sm w-32">Casse</label>
             <div className="w-full flex justify-start">
-                <ToggleGroup type="single" value={casing} onValueChange={(v) => v && setCasing(v)} className="gap-1 bg-muted p-0.5 rounded">
+                <ToggleGroup type="single" value={casing} onValueChange={(v) => v && setCasing(v)} className="gap-1 bg-muted p-0.5 border border-border rounded-sm">
                     {casings.map((casing) => (
 
                         <Tooltip>
