@@ -1,26 +1,30 @@
 import { interpolate } from "remotion";
 import { AnimationProps } from "../types/animation-props-type";
+import FullTextSubtitleEngine from "./share-component/FullTextSubtitleEngine";
 
-export default function Animation10({ currentWords, frame, fps }: AnimationProps) {
-    const wordstartFrame = currentWords ? (currentWords?.startMs / 1000) * fps : 0
-    const wordEndFrame = currentWords ? wordstartFrame + (currentWords?.durationMs / 1000) * fps : 0
-    const layerLength = wordEndFrame - wordstartFrame
-    const fortyPercentOfLayer = layerLength * 0.4
-    const middleFrame = wordstartFrame + fortyPercentOfLayer
-
-    const scale = interpolate(
-        frame,
-        [wordstartFrame, middleFrame],
-        [0.90, 1],
-        {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "clamp",
-        }
-    )
-
+export default function Animation10(props: AnimationProps) {
     return (
-        <div className="flex flex-col gap-1">
-            <div className="text-white" style={{ transform: `scale(${scale})` }}>{currentWords?.text}</div>
-        </div>
+        <FullTextSubtitleEngine
+            {...props}
+            getStyle={({ frame, wordStartFrame, layerLength }) => {
+                const fortyPercentOfLayer = layerLength * 0.4;
+                const middleFrame = wordStartFrame + fortyPercentOfLayer;
+                const scale = interpolate(
+                    frame,
+                    [wordStartFrame, middleFrame],
+                    [0.9, 1],
+                    {
+                        extrapolateLeft: "clamp",
+                        extrapolateRight: "clamp",
+                    }
+                );
+                return {
+                    transform: `scale(${scale})`,
+                    transformOrigin: "center center",
+                };
+            }}
+        />
     );
 }
+
+

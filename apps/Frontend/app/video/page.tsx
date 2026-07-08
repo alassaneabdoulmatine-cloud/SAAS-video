@@ -43,10 +43,10 @@ export default function VideoEditorStudioLight() {
                     </ResizablePanel>
                 </ResizablePanelGroup>
             </ResizablePanel>
-            <ResizableHandle className="hover:border hover:border-primary" />
+            <ResizableHandle />
 
             {/* timeline */}
-            <ResizablePanel defaultSize="10%" minSize="10%" className="bg-muted/40">
+            <ResizablePanel defaultSize="10%" minSize="10%" maxSize="10%" className="bg-muted/40">
                 <Timeline />
             </ResizablePanel>
         </ResizablePanelGroup>

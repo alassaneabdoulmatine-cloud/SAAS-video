@@ -9,6 +9,7 @@ type TextStylePropertiesState = {
     letterSpacing: number;
     lineHeight: number;
     alignment: string;
+    fontWeight: string; // "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800" | "900"
 
     strokeEnabled: boolean;
     strokeThickness: number;
@@ -30,6 +31,7 @@ type TextStylePropertiesState = {
     setLetterSpacing: (spacing: number) => void;
     setLineHeight: (height: number) => void;
     setAlignment: (alignment: string) => void;
+    setFontWeight: (weight: string) => void;
 
     setStrokeEnabled: (enabled: boolean) => void;
     setStrokeThickness: (thickness: number) => void;
@@ -52,6 +54,7 @@ export const useTextStylePropertiesStore = create<TextStylePropertiesState>((set
     letterSpacing: 0,
     lineHeight: 0,
     alignment: "center",
+    fontWeight: "700",
 
     strokeEnabled: false,
     strokeThickness: 10,
@@ -73,6 +76,7 @@ export const useTextStylePropertiesStore = create<TextStylePropertiesState>((set
     setLetterSpacing: (letterSpacing) => set({ letterSpacing }),
     setLineHeight: (lineHeight) => set({ lineHeight }),
     setAlignment: (alignment) => set({ alignment }),
+    setFontWeight: (fontWeight) => set({ fontWeight }),
 
     setStrokeEnabled: (enabled) => set({ strokeEnabled: enabled }),
     setStrokeThickness: (thickness) => set({ strokeThickness: thickness }),

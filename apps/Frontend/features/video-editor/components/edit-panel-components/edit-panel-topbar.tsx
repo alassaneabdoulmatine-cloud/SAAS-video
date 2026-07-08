@@ -18,6 +18,7 @@ import TextStyleBase from "./TextStylePanel-components/style-base-components/tex
 import TextStrokeSection from "./TextStylePanel-components/style-text-line-components/text-stroke-section";
 import TextShadowSection from "./TextStylePanel-components/style-shadow-components/TextShadowSection";
 import { Separator } from "@/components/ui/separator";
+import GeneralSubtitleSettings from "./SubtitlePanel-components/GeneralSubtitleSettings";
 
 const tabs = [
 
@@ -30,12 +31,7 @@ const tabs = [
         id: 2,
         label: "Sous-titre",
         value: "sous-titre"
-    },
-    {
-        id: 3,
-        label: "Animation",
-        value: "animation"
-    },
+    }
 ];
 
 
@@ -59,7 +55,6 @@ export function EditPanelTopBar() {
 
             <TabsContent value="text" className="px-6 py-4">
                 <div className="space-y-4">
-
                     <TextStyleBase />
                     <Separator />
                     <TextStrokeSection />
@@ -68,10 +63,9 @@ export function EditPanelTopBar() {
                 </div>
             </TabsContent>
             <TabsContent value="sous-titre" className="px-6 py-4">
-                <div>contenu sous titre</div>
-            </TabsContent>
-            <TabsContent value="animation" className="px-6 py-4">
-                <div>contenu animation</div>
+                <div>
+                    <GeneralSubtitleSettings />
+                </div>
             </TabsContent>
         </Tabs>
     )
