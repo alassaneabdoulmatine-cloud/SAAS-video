@@ -1,24 +1,19 @@
-
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
 import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs"
-import TextStylePanel from "./TextStylePanel-components/style-base-components/texte-Style-bases"
 import { Button } from "@/components/ui/button"
 import TextStyleBase from "./TextStylePanel-components/style-base-components/texte-Style-bases";
 import TextStrokeSection from "./TextStylePanel-components/style-text-line-components/text-stroke-section";
 import TextShadowSection from "./TextStylePanel-components/style-shadow-components/TextShadowSection";
 import { Separator } from "@/components/ui/separator";
-import GeneralSubtitleSettings from "./SubtitlePanel-components/GeneralSubtitleSettings";
+import WordsPerLineSection from "./SubtitlePanel-components/general-settings-components/words-per-line-section";
+import PositionSection from "./SubtitlePanel-components/general-settings-components/position-section";
+import StyleColorsSection from "./SubtitlePanel-components/general-settings-components/style-colors-section";
+import PunctuationSection from "./SubtitlePanel-components/general-settings-components/punctuation-section";
+import BorderRadiusSection from "./SubtitlePanel-components/general-settings-components/border-radius-section";
 
 const tabs = [
 
@@ -63,8 +58,12 @@ export function EditPanelTopBar() {
                 </div>
             </TabsContent>
             <TabsContent value="sous-titre" className="px-6 py-4">
-                <div>
-                    <GeneralSubtitleSettings />
+                <div className="w-full space-y-6 select-none font-sans rounded-lg">
+                    <WordsPerLineSection />
+                    <PositionSection />
+                    <BorderRadiusSection />
+                    <StyleColorsSection />
+                    <PunctuationSection />
                 </div>
             </TabsContent>
         </Tabs>

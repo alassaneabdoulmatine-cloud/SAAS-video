@@ -28,12 +28,12 @@ type GeneralSubtitleSettingsState = {
 
 export const useGeneralSubtitleSettingsStore = create<GeneralSubtitleSettingsState>((set) => ({
     // --- Defaults ---
-    wordPerLine: "4",
+    wordPerLine: "1",
     posX: 50,
     posY: 68,
     autoEmoji: "none",
     keywordHighlights: false,
-    styleColors: ["#000000", "#00ff00", "#000000"],
+    styleColors: ["#000000", "#00ff00"],
     punctuation: false,
     breakLines: true,
     gapFree: true,

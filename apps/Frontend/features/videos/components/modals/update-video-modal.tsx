@@ -76,7 +76,7 @@ export default function UpdateVideoModal({ video, open, setOpen }: UpdateVideoMo
                                         placeholder="Entrer le nom du projet"
                                         autoComplete="off"
                                         disabled={isPendingUpdateVideo}
-                                        className="h-10 px-4 focus-visible:ring-0 focus-visible:border-primary focus-visible:border-1 transition-all text-base"
+                                        className="h-10 px-4 focus-visible:ring-0 focus-visible:border-primary focus-visible:border transition-all text-base"
                                     />
                                     {fieldState.invalid && fieldState.error?.message && (
                                         <FieldError className="text-sm font-medium text-red-500 mt-2">

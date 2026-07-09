@@ -6,6 +6,6 @@ type Store = {
 }
 
 export const useCombineTokensWithinMillisecondsStore = create<Store>()((set) => ({
-    combineTokensWithinMilliseconds: 400,
+    combineTokensWithinMilliseconds: 0,
     setCombineTokensWithinMilliseconds: (combineTokensWithinMilliseconds: number) => set((state) => ({ combineTokensWithinMilliseconds })),
 }))

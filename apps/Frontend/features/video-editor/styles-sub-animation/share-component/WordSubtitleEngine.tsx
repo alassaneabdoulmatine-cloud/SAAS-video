@@ -46,7 +46,9 @@ export default function WordSubtitleEngine({ currentToken, currentWords, fps, fr
         fontWeight
     } = useTextStylePropertiesStore();
 
-    const { wordPerLine, borderRadius, posX, posY } = useGeneralSubtitleSettingsStore();
+
+    const { wordPerLine, borderRadius, posX, posY, punctuation } = useGeneralSubtitleSettingsStore();
+
 
     // On réduit l'échelle du slider pour que les valeurs du curseur restent douces au pixel près
     const strokeThicknessInPx = strokeThickness * 0.1;
@@ -81,15 +83,7 @@ export default function WordSubtitleEngine({ currentToken, currentWords, fps, fr
         textShadow: textShadowParts.length > 0 ? textShadowParts.join(", ") : "none",
     };
 
-    const wordsPerLineNum = parseInt(wordPerLine, 10) || 4;
-
-    // Découpage des tokens en groupes de `wordsPerLineNum` pour forcer le retour à la ligne propre
     const tokens = currentWords?.tokens ?? [];
-    const tokenChunks = [];
-    for (let i = 0; i < tokens.length; i += wordsPerLineNum) {
-        tokenChunks.push(tokens.slice(i, i + wordsPerLineNum));
-    }
-
     return (
         <div
             style={{
@@ -98,66 +92,50 @@ export default function WordSubtitleEngine({ currentToken, currentWords, fps, fr
                 top: `${posY}%`,
                 transform: "translate(-50%, -50%)",
                 display: "flex",
-                flexDirection: "column",
+                gap: "0.5rem",
+                flexWrap: "wrap",
+                flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "center",
                 width: "max-content",
                 maxWidth: "95%",
-                lineHeight: 1.3,
+
             }}
         >
-            {tokenChunks.map((chunk, chunkIndex) => (
-                <div
-                    key={chunkIndex}
-                    style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        flexWrap: "wrap",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: "max-content",
-                        maxWidth: "100%",
-                        margin: "2px 0",
-                    }}
-                >
-                    {chunk.map((token, index) => {
-                        const tokenStartFrame = (token.fromMs / 1000) * fps;
-                        const tokenEndFrame = (token.toMs / 1000) * fps;
-                        const layerLength = Math.max(0, tokenEndFrame - tokenStartFrame);
-                        const isCurrentToken = currentToken?.fromMs === token.fromMs && currentToken?.toMs === token.toMs;
+            {tokens.map((token, index) => {
+                const tokenStartFrame = (token.fromMs / 1000) * fps;
+                const tokenEndFrame = (token.toMs / 1000) * fps;
+                const layerLength = Math.max(0, tokenEndFrame - tokenStartFrame);
+                const isCurrentToken = currentToken?.fromMs === token.fromMs && currentToken?.toMs === token.toMs;
 
-                        const animatedStyle = getStyle({
-                            frame,
-                            fps,
-                            tokenStartFrame,
-                            tokenEndFrame,
-                            isCurrentToken,
-                            layerLength,
-                        });
 
-                        const hasBackground = !!(animatedStyle.backgroundColor && animatedStyle.backgroundColor !== "transparent");
-                        const radiusStyle: React.CSSProperties = hasBackground
-                            ? { borderRadius: `${borderRadius}em` }
-                            : {};
 
-                        return (
-                            <span
-                                key={`${token.text}-${token.fromMs}-${index}`}
-                                style={{
-                                    ...dynamicStyle,
-                                    ...animatedStyle,
-                                    ...radiusStyle,
-                                    display: "inline-block",
-                                    margin: "0 4px",
-                                    verticalAlign: "middle",
-                                }}
-                            >
-                                {token.text}
-                            </span>
-                        );
-                    })}
-                </div>
-            ))}
+                const animatedStyle = getStyle({
+                    frame,
+                    fps,
+                    tokenStartFrame,
+                    tokenEndFrame,
+                    isCurrentToken,
+                    layerLength,
+                });
+
+                return (
+                    <span
+                        key={`${token.text}-${token.fromMs}-${index}`}
+                        style={{
+                            ...dynamicStyle,
+                            ...animatedStyle,
+                            display: "inline-block",
+                            textWrap: "auto",
+                            margin: "0 4px",
+                            verticalAlign: "middle",
+                        }}
+                    >
+                        {punctuation ? token.text : token.text.replace(/\p{P}/gu, "")}
+                    </span>
+                );
+            })}
+
         </div>
     );
 }

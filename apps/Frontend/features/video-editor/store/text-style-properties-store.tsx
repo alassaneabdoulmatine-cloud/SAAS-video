@@ -52,7 +52,7 @@ export const useTextStylePropertiesStore = create<TextStylePropertiesState>((set
     casing: "uppercase",
     color: "#ffffff",
     letterSpacing: 0,
-    lineHeight: 0,
+    lineHeight: 1,
     alignment: "center",
     fontWeight: "700",
 

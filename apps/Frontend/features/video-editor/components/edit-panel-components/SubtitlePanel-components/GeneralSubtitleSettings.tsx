@@ -15,13 +15,13 @@ export default function GeneralSubtitleSettings() {
         <div className="w-full space-y-6 select-none font-sans rounded-lg">
             <WordsPerLineSection />
             <PositionSection />
-            <AutoEmojiSection />
-            <KeywordHighlightSection />
+            {/* <AutoEmojiSection /> */}
+            {/* <KeywordHighlightSection /> */}
             <StyleColorsSection />
             <PunctuationSection />
-            <BreakLinesSection />
-            <GapFreeSection />
+            {/* <BreakLinesSection /> */}
+            {/* <GapFreeSection /> */}
             <BorderRadiusSection />
         </div>
     );
-}
+}
