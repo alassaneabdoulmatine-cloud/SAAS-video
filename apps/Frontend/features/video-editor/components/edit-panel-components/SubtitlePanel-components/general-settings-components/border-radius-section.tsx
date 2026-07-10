@@ -57,21 +57,19 @@ export default function BorderRadiusSection() {
 
     return (
         <div className="space-y-3 w-full">
-            {/* Label sur sa propre ligne pour laisser de la place au slider */}
             <label className="text-sm font-medium block">Rayon des bordures</label>
 
             <div className="flex items-center gap-3 w-full">
-                {/* Slider visuel adapté aux nombres décimaux */}
                 <Slider
                     value={[borderRadius]}
                     onValueChange={(val) => setBorderRadius(val[0])}
-                    max={5} // 5 em maximum par exemple
+                    max={5}
                     min={0}
-                    step={0.1} // On progresse par paliers de 0.1 em
+                    step={0.1}
                     className="flex-1 cursor-pointer"
                 />
 
-                {/* Ton bloc spinner original */}
+
                 <div className="flex items-center bg-muted border border-border rounded-sm h-8 w-20 px-2 justify-between shrink-0">
                     <span className="text-foreground text-xs font-mono">{borderRadius} em</span>
                     <div className="flex flex-col text-[8px] text-muted-foreground leading-[5px] gap-0.5 select-none">

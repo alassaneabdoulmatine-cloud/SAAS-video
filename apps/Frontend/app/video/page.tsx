@@ -9,11 +9,17 @@ import { EditPanelTopBar } from "@/features/video-editor/components/edit-panel-c
 import TextStylePanel from "@/features/video-editor/components/edit-panel-components/TextStylePanel-components/style-base-components/texte-Style-bases"
 
 import EditSidebar from "@/features/video-editor/components/edit-sidebar"
+import ParametrePanel from "@/features/video-editor/components/parametre-panel"
 import StyleVariantsSidebar from "@/features/video-editor/components/style-variants-sidbar"
+import SubtitlePanel from "@/features/video-editor/components/SubtitlePanel"
 import Timeline from "@/features/video-editor/components/timeline"
 import VideoZone from "@/features/video-editor/components/video-zone"
+import { useLeftBarViewStore } from "@/features/video-editor/store/leftbarview"
 
 export default function VideoEditorStudioLight() {
+
+    const { selectedView } = useLeftBarViewStore();
+
     return (
         <ResizablePanelGroup
             orientation="vertical"
@@ -26,7 +32,9 @@ export default function VideoEditorStudioLight() {
                 >
                     {/* style variants sidebar */}
                     <ResizablePanel defaultSize="30%" className="bg-muted/40">
-                        <StyleVariantsSidebar />
+                        {selectedView === "style" && <StyleVariantsSidebar />}
+                        {selectedView === "subtitles" && <SubtitlePanel />}
+                        {selectedView === "parametre" && <ParametrePanel />}
                     </ResizablePanel>
                     <ResizableHandle withHandle className="hover:border hover:border-primary" />
 
