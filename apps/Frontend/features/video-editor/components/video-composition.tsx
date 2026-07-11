@@ -18,7 +18,7 @@ export const MyVideoComposition = ({ videoSrc, subtitles }: MyVideoCompositionPr
     const { fps } = useVideoConfig();
 
     const { combineTokensWithinMilliseconds } = useCombineTokensWithinMillisecondsStore();
-    const { pagesstore, setPagesstore } = usePagesStore();
+    const { pagesstore, setPagesstore, setCurrentPage } = usePagesStore();
     const currentMs = (frame / fps) * 1000;
 
     const subtitlewithspace = useMemo(() => {
@@ -46,6 +46,10 @@ export const MyVideoComposition = ({ videoSrc, subtitles }: MyVideoCompositionPr
         if (!page) return null;
         return currentMs >= page.startMs && currentMs <= page.startMs + page.durationMs;
     });
+
+    useEffect(() => {
+        setCurrentPage(currentWords ?? null)
+    }, [currentWords])
 
     const currentToken = currentWords?.tokens.find((token) => {
         return (

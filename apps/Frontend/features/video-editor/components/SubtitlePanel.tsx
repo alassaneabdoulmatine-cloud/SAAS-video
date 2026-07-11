@@ -1,83 +1,192 @@
-import { Input } from "@/components/ui/input";
-import { usePagesStore } from "../store/page-store";
+// import { Input } from "@/components/ui/input";
+// import { PageCaption, usePagesStore } from "../store/page-store";
+// import { useCallback } from "react";
+// import { useVideoEditor } from "../hooks/use-video-editor";
+// import { useVideoConfig } from "remotion";
+
+
+// export default function SubtitlePanel() {
+//     const { pagesstore, setPagesstore, currentPage } = usePagesStore();
+//     const { playerRef } = useVideoEditor();
+//     const fps = 30;
+
+//     const updatePageText = useCallback((pageIndex: number, text: string) => {
+//         const words = text.trim().split(/\s+/);
+
+//         const updatedPages = pagesstore.map((page, index) => {
+//             if (index !== pageIndex) return page;
+
+//             // same number of words : we keep the timings
+//             if (words.length === page.tokens.length) {
+//                 return {
+//                     ...page,
+//                     tokens: page.tokens.map((token, i) => ({
+//                         ...token,
+//                         text: words[i],
+//                     })),
+//                 };
+//             }
+
+//             // different number of words :
+//             // we distribute the timings only on this page
+//             const pageStart = page.startMs;
+//             const pageEnd = page.startMs + page.durationMs;
+//             const durationPerWord = page.durationMs / words.length;
+
+//             const newTokens = words.map((word, i) => ({
+//                 text: word,
+//                 fromMs: pageStart + i * durationPerWord,
+//                 toMs: pageStart + (i + 1) * durationPerWord,
+//             }));
+
+//             return {
+//                 ...page,
+//                 tokens: newTokens,
+//             };
+//         });
+
+//         setPagesstore(updatedPages);
+//     }, [setPagesstore, pagesstore]);
+
+//     function handleSeekTo(page: PageCaption) {
+//         if (playerRef.current) {
+//             playerRef.current.seekTo((page.startMs / 1000) * fps + 1);
+//         }
+//     }
+
+//     return (
+//         <div className="flex-1 min-w-0 min-h-0 p-4 space-y-4">
+//             {pagesstore.map((page, index) => (
+//                 <div
+//                     key={index}
+//                     onClick={() => handleSeekTo(page)}
+//                     className={currentPage?.startMs === page.startMs && currentPage?.durationMs === page.durationMs ? "bg-muted p-4 rounded-md" : "p-4"}
+//                 >
+//                     <input
+//                         value={page.tokens.map((token) => token.text).join(" ")}
+//                         onChange={(e) => updatePageText(index, e.target.value)}
+//                         className="w-full hover:border py-1 px-2 hover:border-primary rounded-md"
+//                     />
+//                 </div>
+//             ))}
+//         </div>
+//     );
+// }
+
+
+
+import { useCallback, useEffect, useRef } from "react";
+import { usePagesStore, PageCaption } from "../store/page-store";
+import { useVideoEditor } from "../hooks/use-video-editor";
 
 export default function SubtitlePanel() {
-    const { pagesstore, setPagesstore } = usePagesStore();
+    const { pagesstore, setPagesstore, currentPage } = usePagesStore();
+    const { playerRef } = useVideoEditor();
 
-    // const updatePageText = (pageIndex: number, text: string) => {
-    //     const words = text.trim().split(/\s+/);
+    const fps = 30;
 
-    //     const updatedPages = pagesstore.map((page, index) => {
-    //         if (index !== pageIndex) return page;
+    // Stocke les références de chaque page
+    const pageRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
-    //         const durationPerWord = page.durationMs / words.length;
 
-    //         const newTokens = words.map((word, tokenIndex) => ({
-    //             text: word,
-    //             fromMs: tokenIndex * durationPerWord,
-    //             toMs: (tokenIndex + 1) * durationPerWord,
-    //         }));
+    const updatePageText = useCallback(
+        (pageIndex: number, text: string) => {
+            const words = text.trim().split(/\s+/);
 
-    //         return {
-    //             ...page,
-    //             text,
-    //             tokens: newTokens,
-    //         };
-    //     });
+            const updatedPages = pagesstore.map((page, index) => {
+                if (index !== pageIndex) return page;
 
-    //     setPagesstore(updatedPages);
-    // };
+                // Même nombre de mots : on garde les timings
+                if (words.length === page.tokens.length) {
+                    return {
+                        ...page,
+                        tokens: page.tokens.map((token, i) => ({
+                            ...token,
+                            text: words[i],
+                        })),
+                    };
+                }
 
-    const updatePageText = (pageIndex: number, text: string) => {
-        const words = text.trim().split(/\s+/);
+                // Nombre de mots différent :
+                // on recalcule seulement cette page
+                const pageStart = page.startMs;
+                const durationPerWord =
+                    page.durationMs / words.length;
 
-        const updatedPages = pagesstore.map((page, index) => {
-            if (index !== pageIndex) return page;
+                const newTokens = words.map((word, i) => ({
+                    text: word,
+                    fromMs: pageStart + i * durationPerWord,
+                    toMs: pageStart + (i + 1) * durationPerWord,
+                }));
 
-            // Même nombre de mots : on garde les timings
-            if (words.length === page.tokens.length) {
                 return {
                     ...page,
-                    tokens: page.tokens.map((token, i) => ({
-                        ...token,
-                        text: words[i],
-                    })),
+                    tokens: newTokens,
                 };
-            }
+            });
 
-            // Nombre de mots différent :
-            // on répartit les timings uniquement sur cette page
-            const pageStart = page.startMs;
-            const pageEnd = page.startMs + page.durationMs;
-            const durationPerWord = page.durationMs / words.length;
+            setPagesstore(updatedPages);
+        },
+        [setPagesstore, pagesstore]
+    );
 
-            const newTokens = words.map((word, i) => ({
-                text: word,
-                fromMs: pageStart + i * durationPerWord,
-                toMs: pageStart + (i + 1) * durationPerWord,
-            }));
 
-            return {
-                ...page,
-                tokens: newTokens,
-            };
-        });
+    function handleSeekTo(page: PageCaption) {
+        if (playerRef.current) {
+            playerRef.current.seekTo(
+                (page.startMs / 1000) * fps + 1
+            );
+        }
+    }
 
-        setPagesstore(updatedPages);
-    };
-    console.log("pagesstore", pagesstore)
+
+    // Scroll automatique vers la page active
+    useEffect(() => {
+        if (!currentPage) return;
+
+        const index = pagesstore.findIndex(
+            (page) =>
+                page.startMs === currentPage.startMs &&
+                page.durationMs === currentPage.durationMs
+        );
+
+        if (index !== -1) {
+            pageRefs.current[index]?.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+            });
+        }
+    }, [currentPage, pagesstore]);
+
 
     return (
-        <div className="flex-1 min-w-0 min-h-0 p-4 space-y-4">
+        <div className="flex-1 min-w-0 min-h-0 p-4 space-y-4 overflow-y-auto">
             {pagesstore.map((page, index) => (
                 <div
                     key={index}
-                    className="bg-muted rounded-lg p-4"
+                    ref={(element) => {
+                        pageRefs.current[index] = element;
+                    }}
+                    onClick={() => handleSeekTo(page)}
+                    className={
+                        currentPage?.startMs === page.startMs &&
+                            currentPage?.durationMs === page.durationMs
+                            ? "bg-muted p-4 rounded-md"
+                            : "p-4"
+                    }
                 >
-                    <Input
-                        value={page.tokens.map((token) => token.text).join(" ")}
-                        onChange={(e) => updatePageText(index, e.target.value)}
-                        className="w-full"
+                    <input
+                        value={page.tokens
+                            .map((token) => token.text)
+                            .join(" ")
+                        }
+                        onChange={(e) =>
+                            updatePageText(
+                                index,
+                                e.target.value
+                            )
+                        }
+                        className="w-full hover:border py-1 px-2 hover:border-primary rounded-md"
                     />
                 </div>
             ))}
