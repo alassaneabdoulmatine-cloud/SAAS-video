@@ -20,6 +20,7 @@ export default function VideoPlayerPanel() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [parsedSubtitles, setParsedSubtitles] = useState<Caption[]>([]);
 
+
     useEffect(() => {
         async function initPlayer() {
             try {
@@ -42,6 +43,7 @@ export default function VideoPlayerPanel() {
     }, []);
 
     console.log("render")
+
 
     if (isLoading) return <div className="text-white text-sm p-4">Chargement...</div>;
 

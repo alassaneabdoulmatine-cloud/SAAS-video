@@ -1,6 +1,6 @@
 'use client';
 import { Captions, ChevronLeft, Home, Palette, Settings } from "lucide-react";
-import { useLeftBarViewStore } from "../store/leftbarview";
+import { useLeftBarViewStore } from "../store/left-bar-view";
 import { useRouter } from "next/navigation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";

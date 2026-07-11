@@ -14,7 +14,7 @@ import StyleVariantsSidebar from "@/features/video-editor/components/style-varia
 import SubtitlePanel from "@/features/video-editor/components/SubtitlePanel"
 import Timeline from "@/features/video-editor/components/timeline"
 import VideoZone from "@/features/video-editor/components/video-zone"
-import { useLeftBarViewStore } from "@/features/video-editor/store/leftbarview"
+import { useLeftBarViewStore } from "@/features/video-editor/store/left-bar-view"
 
 export default function VideoEditorStudioLight() {
 

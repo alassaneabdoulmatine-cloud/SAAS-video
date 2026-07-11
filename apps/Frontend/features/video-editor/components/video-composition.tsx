@@ -5,6 +5,8 @@ import { Caption, createTikTokStyleCaptions } from "@remotion/captions";
 import { useStyleVariantStore } from "../store/style-variant-store";
 import animation1 from "../styles-sub-animation/style-animation-1";
 import { useCombineTokensWithinMillisecondsStore } from "../store/combine-tokens-within-milliseconds-store";
+import { useEffect, useMemo } from "react";
+import { usePagesStore } from "../store/page-store";
 
 type MyVideoCompositionProps = {
     videoSrc: string;
@@ -16,21 +18,31 @@ export const MyVideoComposition = ({ videoSrc, subtitles }: MyVideoCompositionPr
     const { fps } = useVideoConfig();
 
     const { combineTokensWithinMilliseconds } = useCombineTokensWithinMillisecondsStore();
+    const { pagesstore, setPagesstore } = usePagesStore();
     const currentMs = (frame / fps) * 1000;
 
-    const subtitlewithspace = subtitles.map((subtitle, index) => {
-        return {
-            ...subtitle,
-            text: index === 0 ? subtitle.text : " " + subtitle.text,
-        };
-    });
+    const subtitlewithspace = useMemo(() => {
+        return subtitles.map((subtitle, index) => {
+            return {
+                ...subtitle,
+                text: index === 0 ? subtitle.text : " " + subtitle.text,
+            };
+        });
+    }, [subtitles]);
 
-    const { pages } = createTikTokStyleCaptions({
+
+
+    const { pages } = useMemo(() => createTikTokStyleCaptions({
         captions: subtitlewithspace,
         combineTokensWithinMilliseconds: combineTokensWithinMilliseconds,
-    });
+    }), [subtitlewithspace, combineTokensWithinMilliseconds]);
 
-    const currentWords = pages.find(page => {
+    useEffect(() => {
+        setPagesstore(pages)
+    }, [pages])
+
+
+    const currentWords = pagesstore.find(page => {
         if (!page) return null;
         return currentMs >= page.startMs && currentMs <= page.startMs + page.durationMs;
     });
