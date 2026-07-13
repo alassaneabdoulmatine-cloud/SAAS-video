@@ -10,6 +10,7 @@ import { OpenAiModule } from 'src/openai/openai.module';
 import { FfmpegModule } from 'src/ffmpeg/ffmpeg.module';
 import { UploadModule } from 'src/upload/upload.module';
 import { VideosModule } from 'src/videos/videos.module';
+import { LocalwhisperModule } from 'src/localwhisper/localwhisper.module';
 
 
 
@@ -33,7 +34,8 @@ import { VideosModule } from 'src/videos/videos.module';
     OpenAiModule,
     FfmpegModule,
     UploadModule,
-    VideosModule
+    VideosModule,
+    LocalwhisperModule
 
   ],
   controllers: [VideoProcessorController],

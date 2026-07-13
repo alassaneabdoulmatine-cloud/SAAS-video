@@ -12,6 +12,8 @@ import { BullModule } from '@nestjs/bullmq';
 import { VideoProcessorModule } from './video-processor/video-processor.module';
 import { OpenAiModule } from './openai/openai.module';
 import { FfmpegModule } from './ffmpeg/ffmpeg.module';
+import { GoogleaiModule } from './googleai/googleai.module';
+import { LocalwhisperModule } from './localwhisper/localwhisper.module';
 
 @Module({
   imports: [
@@ -33,6 +35,8 @@ import { FfmpegModule } from './ffmpeg/ffmpeg.module';
     VideoProcessorModule,
     OpenAiModule,
     FfmpegModule,
+    GoogleaiModule,
+    LocalwhisperModule,
   ],
 })
 export class AppModule { }

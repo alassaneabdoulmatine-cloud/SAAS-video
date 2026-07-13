@@ -16,7 +16,7 @@ export class WorkspaceMemberGuard implements CanActivate {
         });
 
         if (!member) {
-            throw new ForbiddenException("vous n'etes pas membre de ce workspace");
+            throw new ForbiddenException("Vous n'êtes pas membre de ce workspace.");
         }
 
         return true;

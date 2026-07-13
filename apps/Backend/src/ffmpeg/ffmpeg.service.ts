@@ -46,7 +46,7 @@ export class FfmpegService {
     }
 
     /**
-     *      ÉTAPE COMPLÉMENTAIRE : Extrait une miniature (JPEG) à la 1ère seconde de la vidéo
+     * ÉTAPE COMPLÉMENTAIRE : Extrait une miniature (JPEG) à la 1ère seconde de la vidéo
      * @param videoUrl URL de la vidéo distante (CloudFront / S3)
      * @param videoId ID unique pour nommer l'image
      * @returns Le chemin absolu du fichier .jpg généré sur le VPS
@@ -59,7 +59,7 @@ export class FfmpegService {
         return new Promise((resolve, reject) => {
             ffmpeg(videoUrl)
                 // On cible le moment précis de la capture (1ère seconde)
-                .seekInput('00:00:01.000')
+                .seekInput('00:00:03.000')
                 // On demande 1 seule image
                 .frames(1)
                 // Option de redimensionnement (optionnelle, conserve le ratio original ici)
