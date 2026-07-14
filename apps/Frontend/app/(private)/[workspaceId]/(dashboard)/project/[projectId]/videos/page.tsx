@@ -9,8 +9,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-import VideoFilesList from "../../../../../../features/videos/components/VideoFilesList";
-import EmptyProjectState from "../../../../../../features/videos/components/EmptyProjectState";
+import VideoFilesList from "@/features/videos/components/VideoFilesList";
+import EmptyProjectState from "@/features/videos/components/EmptyProjectState";
 import { useParams, usePathname } from "next/navigation";
 import { useVideos } from "@/features/videos/queries/videos-queries";
 

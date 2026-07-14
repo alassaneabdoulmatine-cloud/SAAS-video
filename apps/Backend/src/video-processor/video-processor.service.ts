@@ -64,7 +64,6 @@ export class VideoProcessorService {
 
             const thumbS3Url = await this.uploadService.uploadLocalFile(tempThumbPath, thumbnailKey);
             const transcription = await this.localwhisperService.transcribeLocalWhisper(tempAudioPath);
-            // const stylizedSubtitles = await this.openAiService.stylizeSubtitles(transcription);
             //    const transcription = await this.openAiService.transcribe(tempAudioPath);
             //     const stylizedSubtitles = await this.openAiService.stylizeSubtitles(transcription); 
 

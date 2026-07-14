@@ -7,8 +7,11 @@ import { getMediaMetadata } from "@/lib/helpers";
 import { Player } from "@remotion/player";
 import { parseSrt, Caption } from "@remotion/captions";
 import { useVideoEditor } from "../hooks/use-video-editor";
+import { useVideos } from "@/features/videos/queries/videos-queries";
+import { useParams } from "next/navigation";
 
 export default function VideoPlayerPanel() {
+    const params = useParams()
     const [isShort, setIsShort] = useState(true);
     const width = isShort ? 1080 : 1920;
     const height = isShort ? 1920 : 1080;
@@ -19,6 +22,9 @@ export default function VideoPlayerPanel() {
     const [duration, setDuration] = useState<number>(30);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [parsedSubtitles, setParsedSubtitles] = useState<Caption[]>([]);
+    const { video } = useVideos(params.videoId as string)
+    const subtitle = video?.subtitles
+    console.log("subtitle ", subtitle)
 
 
     useEffect(() => {

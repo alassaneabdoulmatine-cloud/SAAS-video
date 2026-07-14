@@ -5,12 +5,22 @@ import { Spinner } from "@/components/ui/spinner";
 import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { useUploadStore } from "../store/upload-store";
 import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
 
 type VideoFilesCardProps = {
     video: Video;
 }
 
 export default function VideosFilesCard({ video }: VideoFilesCardProps) {
+
+    const router = useRouter();
+    const params = useParams();
+    const projectId = params.projectId as string;
+    const workspaceId = params.workspaceId as string;
+
+    function handleVideoClick() {
+        router.push(`/${workspaceId}/project/${projectId}/videos/${video.id}`);
+    }
 
     const { uploadProgress } = useUploadStore()
 
@@ -24,9 +34,10 @@ export default function VideosFilesCard({ video }: VideoFilesCardProps) {
     }
     return (
         <>
-            <div className="flex flex-col w-[272px] h-[211px]">
+            <div className="flex flex-col w-[272px] h-[211px]" >
                 <div
                     className="w-[272px] h-[153px] border rounded-md cursor-pointer relative bg-slate-950"
+                    onClick={handleVideoClick}
                 >
                     <Image className="w-full h-full object-contain" src={video.thumbnail || "/image1.jpeg"} alt="" width={100} height={100} />
                     {video.status === "UPLOADING" && <div className="absolute top-2 left-2 px-1 py-0 bg-secondary rounded-sm">
