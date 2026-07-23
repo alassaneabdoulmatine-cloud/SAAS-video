@@ -19,7 +19,7 @@ function getOnlyActiveStyle({
 }
 
 export default function Animation1(props: AnimationProps) {
-    return <div >
+    return <div>
         <WordSubtitleEngine {...props} getStyle={getOnlyActiveStyle} />
     </div>;
 }

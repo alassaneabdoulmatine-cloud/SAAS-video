@@ -63,16 +63,15 @@ export class VideoProcessorService {
             if (!tempAudioPath) throw new Error('Audio extraction failed');
 
             const thumbS3Url = await this.uploadService.uploadLocalFile(tempThumbPath, thumbnailKey);
-            const transcription = await this.localwhisperService.transcribeLocalWhisper(tempAudioPath);
-            //    const transcription = await this.openAiService.transcribe(tempAudioPath);
-            //     const stylizedSubtitles = await this.openAiService.stylizeSubtitles(transcription); 
+            const transcription = await this.openAiService.transcribe(tempAudioPath);
+            const stylizedSubtitles = await this.openAiService.stylizeSubtitles(transcription); 
 
             await this.videoService.update(
                 videoId,
                 {
                     thumbnailUrl: thumbS3Url,
                     thumbnailKey,
-                    subtitles: transcription,
+                    subtitles: stylizedSubtitles,
                     status: VideoStatus.SUCCESS,
                 },
                 projectId,

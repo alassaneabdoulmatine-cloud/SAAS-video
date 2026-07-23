@@ -64,31 +64,4 @@ export class CreateVideoDto {
 
 }
 
-// model Video {
-//   id String @id @default (uuid())
 
-//   title       String
-//   description String ?
-
-//         status VideoStatus @default (PENDING)
-
-//   videoRawUrl  String ?
-//         videoRawKey  String ?
-//             thumbnailUrl String ?
-//                 thumbnailKey String ?
-
-//                     videoFinalKey String ? //video securiser
-//                         subtitles     Json ?
-
-//                             fileName String ?
-//                                 fileSize Int ?
-//                                     mimeType String ?
-
-//                                         duration String ? @default ("00:00")
-
-//   projectId String
-//   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-//   createdAt DateTime @default (now())
-//   updatedAt DateTime @updatedAt
-// }

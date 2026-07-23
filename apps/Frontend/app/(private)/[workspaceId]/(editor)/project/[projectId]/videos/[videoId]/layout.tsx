@@ -1,8 +1,6 @@
 "use client";
 
-import EditTopBar from "@/features/video-editor/components/edit-Topbar";
 import EditSidebar from "@/features/video-editor/components/edit-sidebar";
-import StyleVariantsSidebar from "@/features/video-editor/components/style-variants-sidbar";
 import { VideoEditorProvider } from "@/features/video-editor/context/VideoEditorContext";
 
 export default function VideoLayout({ children }: { children: React.ReactNode }) {

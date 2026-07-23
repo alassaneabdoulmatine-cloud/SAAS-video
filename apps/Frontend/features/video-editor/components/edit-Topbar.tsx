@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Scissors, Type, Zap } from "lucide-react";
 
-export default function EditHeaderBar() {
+export default function EditTopBar() {
     return (
         <header className="h-14 border-b border-[#e4e4e7] flex items-center justify-between px-6 bg-white z-50">
             <div className="flex items-center gap-4">

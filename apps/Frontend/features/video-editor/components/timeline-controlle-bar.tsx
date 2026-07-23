@@ -16,7 +16,7 @@ import {
 import { useVideoEditor } from "../hooks/use-video-editor";
 import { CallbackListener } from "@remotion/player";
 
-// 🚀 Petite fonction utilitaire pour formater en MM:SS
+// Petite fonction utilitaire pour formater en MM:SS
 function formatTime(seconds: number): string {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
@@ -38,7 +38,7 @@ export default function TimelineControlBar() {
             timingRef.current.innerText = `00:00 / ${durationText}`;
         }
 
-        // 2. 👑 Typage strict avec CallbackListener de Remotion pour éviter l'erreur TS
+        // 2. Typage strict avec CallbackListener de Remotion pour éviter l'erreur TS
         const onTimeUpdate: CallbackListener<"timeupdate"> = (e) => {
             if (timingRef.current) {
                 const currentSeconds = e.detail.frame / fps;

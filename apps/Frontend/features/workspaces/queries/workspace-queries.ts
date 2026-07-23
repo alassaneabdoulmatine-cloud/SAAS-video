@@ -14,7 +14,7 @@ export function useWorkspace() {
 
     const queryClient = useQueryClient();
 
-    // 🔁 invalidation helper propre
+    // invalidation helper propre
     const invalidate = () => {
         queryClient.invalidateQueries({ queryKey: workspaceKeys.all });
         if (workspaceId) {
@@ -24,7 +24,7 @@ export function useWorkspace() {
         }
     };
 
-    // 🟢 CREATE
+    // CREATE
     const { mutateAsync: createWorkspace, isPending: isCreating } = useMutation({
         mutationFn: async (name: string) => {
             return api<Workspace>("/workspace", {
@@ -41,20 +41,20 @@ export function useWorkspace() {
         },
     });
 
-    // 🟢 LIST
+    // LIST
     const { data: workspaces, isLoading: workspaceListLoading } = useQuery({
         queryKey: workspaceKeys.all,
         queryFn: () => api<Workspace[]>("/workspace"),
     });
 
-    // 🟢 SINGLE WORKSPACE
+    //  SINGLE WORKSPACE
     const { data: workspace, isLoading: workspaceLoading } = useQuery({
         queryKey: workspaceKeys.detail(workspaceId),
         queryFn: () => api<Workspace>(`/workspace/${workspaceId}`),
         enabled: !!workspaceId,
     });
 
-    // 🟡 UPDATE
+    //  UPDATE
     const { mutateAsync: updateWorkspace, isPending: isUpdating } = useMutation({
         mutationFn: async (name: string) => {
             return api<Workspace>(`/workspace/${workspaceId}`, {
@@ -71,7 +71,7 @@ export function useWorkspace() {
         },
     });
 
-    // 🔴 DELETE
+    //  DELETE
     const { mutateAsync: deleteWorkspace, isPending: isDeleting } = useMutation({
         mutationFn: async () => {
             return api<Workspace>(`/workspace/${workspaceId}`, {
